@@ -107,8 +107,8 @@ class App extends Component {
                     },
 
                     async () => {
-                        console.log("✅ Το state ενημερώθηκε! Τώρα εκτελούμε fetchProposals...");
-                        await this.fetchProposals();
+                        console.log("✅ Το state ενημερώθηκε! Τώρα εκτελούμε fetchCandidates...");
+                        await this.fetchCandidates();
                     }
                 )
             }
@@ -148,7 +148,7 @@ class App extends Component {
             console.log("Current Timestamp:", curTimestamp.toString() + "n"); 
 
             // Εκτέλεση συναλλαγής
-            const txResponse = await this.state.ballot.startElections(curTimestamp)
+            const txResponse = await this.state.ballot.startBallot(curTimestamp)
             console.log("Transaction hash:", txResponse.hash);
 
             // Αναμονή για επιβεβαίωση στο blockchain
@@ -208,7 +208,9 @@ class App extends Component {
             console.log("Transaction confirmed in block:", txReceipt.blockNumber);
             console.log("Transaction :", txResponse);
 
-            await this.fetchProposals();
+            console.log("test")
+
+            await this.fetchCandidates();
             const msg = "Candidate registered successfully!"
 
             this.setState({
@@ -525,7 +527,7 @@ class App extends Component {
                 // Έλεγχος αν περιέχει τη φράση "Error: Assert Failed"
                 if (error.message.includes("Password Fail")) {
                     errorMessage = "Error: Incorrect code syntax!!"
-                    window.alert("Το vote secret πρέπει να είναι τουλάχιστον 12 χαρακτήρες και να περιέχει:\n- Τουλάχιστον ένα κεφαλαίο γράμμα\n- Τουλάχιστον ένα πεζό γράμμα\n- Τουλάχιστον έναν αριθμό\n- Τουλάχιστον ένα ειδικό σύμβολο (@$!%*?&)");
+                    window.alert("Your vote secret must be at least 12 characters long and contain: \n - At least one uppercase letter\n - At least one lowercase letter\n - At least one number\n - At least one special character (@$!%*?&)");
                     labId = 4
                 }
                 else {
@@ -643,14 +645,14 @@ class App extends Component {
 
             // 🔹 Convert `BigInt` values to strings before sending them in JSON
             const formattedCommitments = voteCommitments.map(vote => vote.toString());
-            console.log("Candidates: ", this.state.candidates);
+            console.log("Candidates: ", this.state.candidateNum);
 
-            // Στέλνουμε τον αριθμό τον candidates για να βρούμε τα αποτελέσματα
+            // Στέλνουμε τον αριθμό τον candidateNum για να βρούμε τα αποτελέσματα
             const response = await fetch("http://127.0.0.1:5000/get-final-results", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
-                    candidates: this.state.candidates,
+                    candidateNum: this.state.candidateNum,
                     voteCommitments: formattedCommitments,
                     address: this.state.account
                  })
@@ -665,8 +667,8 @@ class App extends Component {
             const voteResultsArray = Object.values(data.voteResults);
             console.log("Vote Results Array:", voteResultsArray);
 
-            // Ενημέρωση του struct Proposal με τα τελικά αποτελέσματα 
-            const txResponse = await this.state.ballot.issueElectionResults(voteResultsArray);
+            // Ενημέρωση του struct Candidate με τα τελικά αποτελέσματα 
+            const txResponse = await this.state.ballot.issueBallotResults(voteResultsArray);
             console.log("Transaction hash:", txResponse.hash);
 
             // Αναμονή για επιβεβαίωση στο blockchain
@@ -674,7 +676,7 @@ class App extends Component {
             console.log("Transaction confirmed in block:", txReceipt.blockNumber);
             console.log("Transaction :", txResponse);
 
-            await this.fetchProposals()
+            await this.fetchCandidates()
 
             this.setState({
                 issuedResults: true,
@@ -713,25 +715,25 @@ class App extends Component {
 
     }
 
-    fetchProposals = async () => {
+    fetchCandidates = async () => {
 
-        const proposalsCount = await this.state.ballot.candidatesCount();
-        let Proposals = [];
+        const candidatesCount = await this.state.ballot.candidatesCount();
+        let Candidates = [];
 
-        for (let i = 0; i < proposalsCount; i++) {
-            const proposal = await this.state.ballot.proposals(i);
-            const proposalName = ethers.decodeBytes32String(proposal.name); // Μετατροπή σε string
+        for (let i = 0; i < candidatesCount; i++) {
+            const candidate = await this.state.ballot.candidates(i);
+            const candidateName = ethers.decodeBytes32String(candidate.name); // Μετατροπή σε string
     
             // Προσθήκη αντικειμένου με name και voteCount
-            Proposals.push({
-                name: proposalName,
-                voteCount: proposal.voteCount,
+            Candidates.push({
+                name: candidateName,
+                voteCount: candidate.voteCount,
             });
         }
 
         this.setState({ 
-            candidates: proposalsCount.toString(),
-            proposals: Proposals,
+            candidateNum: candidatesCount.toString(),
+            candidates: Candidates,
             curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString()
          });
     };
@@ -739,23 +741,23 @@ class App extends Component {
 
     showElectionsResults = async () => {
 
-        await this.fetchProposals()
+        await this.fetchCandidates()
 
         if (this.state.issuedResults) {
-            let Proposals = this.state.proposals, temp;
+            let Candidates = this.state.candidates, temp;
 
-            for (let i=0; i < Proposals.length-1; i++) {
-                for (let j=0; j < (Proposals.length-i-1); j++) { 
-                    if(Proposals[j].voteCount < Proposals[j+1].voteCount){  
+            for (let i=0; i < Candidates.length-1; i++) {
+                for (let j=0; j < (Candidates.length-i-1); j++) { 
+                    if(Candidates[j].voteCount < Candidates[j+1].voteCount){  
                         //swap elements  
-                        temp = Proposals[j];  
-                        Proposals[j] = Proposals[j+1];  
-                        Proposals[j+1] = temp;  
+                        temp = Candidates[j];  
+                        Candidates[j] = Candidates[j+1];  
+                        Candidates[j+1] = temp;  
                     } 
                 }
             }
 
-            this.setState({finalProposals: Proposals})
+            this.setState({finalCandidates: Candidates})
         }
 
         this.setState({ 
@@ -781,10 +783,10 @@ class App extends Component {
             startupTime: '0',
             endTime: '0',
             loading: true,
-            candidates: '0',
+            candidateNum: '0',
             voters: '0',
-            proposals: [],
-            finalProposals: [],
+            candidates: [],
+            finalCandidates: [],
             issuedResults: false,
             pressResults: false,
             txMsg: '',
@@ -806,7 +808,7 @@ class App extends Component {
         content =
             <Main 
                 stgLimit = {this.state.stgLimit}
-                candidates = {this.state.candidates}
+                candidateNum = {this.state.candidateNum}
                 voters = {this.state.voters}
                 registerCandidates = {this.registerCandidates}
                 registerVoters = {this.registerVoters}
@@ -815,8 +817,8 @@ class App extends Component {
                 pressResults = {this.state.pressResults}
                 showElectionsResults = {this.showElectionsResults}
                 countVotes = {this.countVotes}
-                proposals = {this.state.proposals}
-                finalProposals = {this.state.finalProposals}
+                candidates = {this.state.candidates}
+                finalCandidates = {this.state.finalCandidates}
                 txMsg = {this.state.txMsg}
                 errorTrig = {this.state.errorTrig}
                 labelId = {this.state.labelId}

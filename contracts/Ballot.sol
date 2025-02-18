@@ -8,13 +8,13 @@ interface IGroth16Verifier {
 
 contract Ballot {
     // *** Πρέπει να φτιάξω μια σελίδα όπου ο chairperson θα κάνει register τους ψηφοφόρους
-    struct Proposal {      
+    struct Candidate {      
         bytes32 name;   // short name (up to 32 bytes)
         uint voteCount; // number of accumulated votes
     }
 
     address public chairperson;
-    Proposal[] public proposals;
+    Candidate[] public candidates;
     uint256 public startupTime;
     uint256 public endTime;
     uint256 public stageLimit;
@@ -53,7 +53,7 @@ contract Ballot {
     event ProofResult(bool result);
     event VoteSubmitted(uint256 voteCommitment, uint256 indexed nullifierHash);
 
-    function startElections(uint256 curTime) onlyOwner public {
+    function startBallot(uint256 curTime) onlyOwner public {
         require(startupTime == 0, "The elections has already been started");
         startupTime = block.timestamp;
         endTime = startupTime + stageLimit;
@@ -67,7 +67,7 @@ contract Ballot {
 
         require(startupTime == 0, "The candidates registration process has been completed.");
 
-        proposals.push(Proposal( {
+        candidates.push(Candidate( {
             name: _name,
             voteCount: 0
         }));
@@ -150,32 +150,17 @@ contract Ballot {
         return allVoteCommitments;
     }
 
-    function issueElectionResults(uint[] memory votes) onlyOwner public {
+    function issueBallotResults(uint[] memory votes) onlyOwner public {
         // Εδώ θα ελέγχεται εάν έχει λήξη η ψηφοφορία
         require(startupTime !=0, "The voting process hasn't started yet");
         require(block.timestamp > endTime, "The voting process hasn't completed yet.");
 
-        for (uint8 p = 0; p < proposals.length; p++) {
-            proposals[p].voteCount = votes[p];
+        for (uint8 p = 0; p < candidates.length; p++) {
+            candidates[p].voteCount = votes[p];
         }
 
         issuedResults = true;
     }
-
-    // everyone can display the Winner(s) of Elections
-    // function showWinner() public view returns (uint8 winIndex) {
-
-    //     // require(block.timestamp > (startupTime + 2*stageLimit), "The elections have not finished yet.");
-
-    //     uint winnnerVotes = 0;
-
-    //     for (uint8 p = 0; p < proposals.length; p++) {
-    //         if (proposals[p].voteCount > winnnerVotes) {
-    //             winnnerVotes = proposals[p].voteCount;
-    //             winIndex = p;
-    //         }
-    //     }
-    // }
 
     // event DebugInputs(uint256[2] pA, uint256[2][2] pB, uint256[2] pC, uint256[2] pubSignals);
 
