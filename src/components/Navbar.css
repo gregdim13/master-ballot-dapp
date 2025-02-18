@@ -28,9 +28,21 @@
     height: 28px;
 }
 
-
 .chairperson-svg-off {
     filter: invert(1);
     width: 28px;
     height: 28px;
+}
+
+.nav-icon img {
+    filter: invert(100%);
+    transition: filter 0.3s ease;
+  }
+  
+.nav-icon:hover img {
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1350%) hue-rotate(195deg) brightness(98%) contrast(92%);
+}
+
+.nav-icon:hover {
+    color: #86b2f5;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { FaLinkedin, FaEnvelope, FaUniversity, FaEthereum } from "react-icons/fa"; // npm install react-icons
+import { FaLinkedin, FaEnvelope, FaUniversity, FaEthereum, FaGithub } from "react-icons/fa"; // npm install react-icons
 import metamaskLogo from "../metamask.svg"; // Βάλε το logo στον φάκελο assets
 import './Footer.css'; 
 
@@ -18,6 +18,9 @@ const Footer = () => {
             </a>
             <a href="mailto:mscacs23001@uniwa.gr" className="me-3">
                 <FaEnvelope size={27} />
+            </a>
+            <a href="https://github.com/gregdim13" target="_blank" rel="noopener noreferrer" className="me-3">
+               <FaGithub size={27} />
             </a>
             <a href="https://msc-acs.uniwa.gr/" target="_blank" rel="noopener noreferrer" className="me-2">
                 <FaUniversity size={27} />

@@ -109,6 +109,115 @@
       "artifacts": [
         "Groth16Verifier"
       ]
+    },
+    "C:\\master-ballot-dapp\\contracts\\Ballot.sol": {
+      "lastModificationDate": 1739862737471,
+      "contentHash": "2c5791c6118646135929849bfbe2fa92",
+      "sourceName": "contracts/Ballot.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "Ballot",
+        "IGroth16Verifier"
+      ]
+    },
+    "C:\\master-ballot-dapp\\contracts\\FakeTornado.sol": {
+      "lastModificationDate": 1739862737471,
+      "contentHash": "3e6bfecfac033288db0edc2607071763",
+      "sourceName": "contracts/FakeTornado.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "FakeTornado"
+      ]
+    },
+    "C:\\master-ballot-dapp\\contracts\\Groth16Verifier.sol": {
+      "lastModificationDate": 1739862737471,
+      "contentHash": "091a1e861410e746e7e910f369bd0ec5",
+      "sourceName": "contracts/Groth16Verifier.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.7.0 <0.9.0"
+      ],
+      "artifacts": [
+        "Groth16Verifier"
+      ]
     }
   }
 }

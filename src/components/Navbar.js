@@ -11,16 +11,20 @@ class Navbar extends Component {
 
         return (
             <nav className="navbar navbar-dark fixed-top shadow p-0 navbar-responsive" style={{ display: "flex", backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)", minHeight: "80px"}}>
-                <a className="navbar-brand col-sm-3 col-md-2 me-0 nav-icon" href="http://localhost:3000/">
+                <a className="navbar-brand nav-icon col-sm-3 col-md-2 me-0 d-flex align-items-center" href="http://localhost:3000/">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <img
                     src={vote}
-                    width="30"
-                    height="30"
+                    width="48"
+                    height="48"
                     className="d-inline-block align-top"
                     alt="bank"
                     />
-                    &nbsp; DAPP Ballot
+                    <div className="ms-3 d-flex flex-column" style={{fontSize: "18px", fontWeight: "bold", lineHeight: "1.4"}}>
+                        <span>Decentralized</span>
+                        <span>Voting</span>
+                        <span>Application</span>
+                    </div>
                 </a>
                 {
                     !this.props.loading ? 
