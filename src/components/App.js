@@ -60,16 +60,9 @@ class App extends Component {
             const verifierData = Groth16Verifier.networks[networkId];
             const tornadoData = FakeTornado.networks[networkId];
 
-            // Παίρνουμε το τελευταίο block
-            // const block = await provider.getBlock("latest");
-            // Μετατροπή timestamp σε readable format
-            // let curTimestamp = BigInt(block.timestamp)
-
-
             if (ballotData) {  // if js ballot finds it
                 
                 const ballot = new ethers.Contract(ballotData.address, Ballot.abi, signer)
-                console.log("Ballot:  ", ballot.target)
 
                 const startupTime = await ballot.startupTime();  
                 const curTimestamp = BigInt(Math.floor(Date.now() / 1000));
@@ -78,7 +71,6 @@ class App extends Component {
                 let stgLimit =  await ballot.stageLimit();
 
                 console.log("Elections started at:", startupTime.toString());
-                console.log("Stage Limit:", stgLimit.toString()); 
 
                 startupTime === BigInt(0) ? 
                     this.setState({startVoting: false}) : 
@@ -87,9 +79,6 @@ class App extends Component {
                 const endTime = stgLimit + startupTime
 
                 const issRes = await ballot.issuedResults();
-
-                console.log("curTimestamp: ", curTimestamp)
-                console.log("endTime: ", endTime)
 
                 let votersLength = await ballot.votersCount()
 
@@ -107,7 +96,7 @@ class App extends Component {
                     },
 
                     async () => {
-                        console.log("✅ Το state ενημερώθηκε! Τώρα εκτελούμε fetchCandidates...");
+                        console.log("Τα states ενημερώθηκαν! Τώρα εκτελούμε fetchCandidates...");
                         await this.fetchCandidates();
                     }
                 )
@@ -145,7 +134,6 @@ class App extends Component {
         try {
 
             let curTimestamp = BigInt(Math.floor(Date.now() / 1000));
-            console.log("Current Timestamp:", curTimestamp.toString() + "n"); 
 
             // Εκτέλεση συναλλαγής
             const txResponse = await this.state.ballot.startBallot(curTimestamp)
@@ -207,8 +195,6 @@ class App extends Component {
             const txReceipt = await txResponse.wait();
             console.log("Transaction confirmed in block:", txReceipt.blockNumber);
             console.log("Transaction :", txResponse);
-
-            console.log("test")
 
             await this.fetchCandidates();
             const msg = "Candidate registered successfully!"
@@ -638,9 +624,9 @@ class App extends Component {
     countVotes = async () => {
         this.setState({loading: true})
         try {
-
-            await this.state.ballot.callStatic.issueBallotResults([0]) // τσεκάρει αν έχει ολοκληρωθεί η ψηφοφορία
             
+            if (this.state.curTimestamp <= this.state.endTime) throw new Error("Results cannot be issued before the ballot is finished.")
+
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();
             console.log("Blockchain Vote Commitments:", voteCommitments);
@@ -823,7 +809,7 @@ class App extends Component {
             />
         
         return (
-            <div className='App' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <div className='App' style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
                 <div style={{position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: -1, minHeight:'85vh'}}>
                     <ParticleSettings />
                 </div>

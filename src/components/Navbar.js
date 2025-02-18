@@ -10,7 +10,12 @@ class Navbar extends Component {
     render() {
 
         return (
-            <nav className="navbar navbar-dark fixed-top shadow p-0 navbar-responsive" style={{ display: "flex", backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)", minHeight: "80px"}}>
+            <nav className="navbar navbar-dark fixed-top shadow p-0 navbar-responsive" style={{
+                 display: "flex", 
+                 backgroundColor: "rgba(0, 0, 0, 0.7)", 
+                 backdropFilter: "blur(5px)", 
+                 minHeight: "80px" 
+            }} >
                 <a className="navbar-brand nav-icon col-sm-3 col-md-2 me-0 d-flex align-items-center" href="http://localhost:3000/">
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <img
@@ -26,6 +31,7 @@ class Navbar extends Component {
                         <span>Application</span>
                     </div>
                 </a>
+                <div className="col-auto ms-4">
                 {
                     !this.props.loading ? 
                         (!this.props.startVoting ?
@@ -52,6 +58,7 @@ class Navbar extends Component {
                     :
                     <></>
                 }
+                </div>
 
                 <div className="d-flex flex-column align-items-end ms-auto flex-wrap">
                     <ul className="navbar-nav px-4">

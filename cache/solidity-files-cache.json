@@ -111,8 +111,8 @@
       ]
     },
     "C:\\master-ballot-dapp\\contracts\\Ballot.sol": {
-      "lastModificationDate": 1739883953157,
-      "contentHash": "8eee92b12d71526e569c86e093613f12",
+      "lastModificationDate": 1739907612505,
+      "contentHash": "d5c51fa427e8a16b7cdc367d9c19f990",
       "sourceName": "contracts/Ballot.sol",
       "solcConfig": {
         "version": "0.8.28",

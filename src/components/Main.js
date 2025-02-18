@@ -78,6 +78,9 @@ class Main extends Component {
                                     event.preventDefault()
                                     let voterAddress = this.voterInput.value.toString()
                                     this.props.registerVoters(voterAddress)
+
+                                    // Καθαρίζουμε το input μετά την υποβολή
+                                    this.voterInput.value = "";
                                 }}
                                 className='mx-2 mb-2 mt-2' 
                             >
@@ -90,7 +93,7 @@ class Main extends Component {
                                             type='text'
                                             placeholder="Enter Voter's Address"
                                             required
-                                            style= {{width: '30%'}}
+                                            style= {{width: '30%'}}                                          
                                         />
                                         <label id='2' className='float-left' 
                                             style={{ 
@@ -243,7 +246,7 @@ class Main extends Component {
                                         (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
                                                 'The winner is ' + this.props.finalCandidates[0].name + ' with ' + this.props.finalCandidates[0].voteCount + ' votes.' 
                                                 : 
-                                                'Elections results have not issued yet.'
+                                                <span style={{fontWeight: 'normal', color: 'red'}}>Elections results have not issued yet.</span>
                                         )
                                         :
                                         <></>

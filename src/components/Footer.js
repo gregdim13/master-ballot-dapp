@@ -5,14 +5,19 @@ import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer className="text-white py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)", bottom: 0, width: "100%", height:"50px" }}>
+    <footer className="text-white d-flex align-items-center py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)", bottom: 0, width: "100%", height:"60px" }}>
       <div className="container-fluid d-flex justify-content-between">
         
         <div className="text-start py-1">
-            &nbsp;&nbsp;<small>© 2025  <strong>Dimopoulos Grigorios</strong></small>
+            &nbsp;&nbsp;
+            <small>© 2025  <strong>Grigorios Dimopoulos</strong></small>
+            <br />&nbsp;&nbsp;
+            <small style={{ fontStyle: "italic", opacity: 0.8 }}>
+            Powered by Zero-Knowledge Proof (ZKP) technology for cryptographic privacy and security.
+            </small>
         </div>
 
-        <div className="text-end footer-icons">
+        <div className="text-end footer-icons d-flex align-items-center">
             <a href="https://www.linkedin.com/in/grigorios-dimopoulos-357465155/" target="_blank" rel="noopener noreferrer" className="me-3">
                 <FaLinkedin size={27} />
             </a>
