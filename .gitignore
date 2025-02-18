@@ -9,6 +9,7 @@
 /keys
 /artifacts
 /src/artifacts
+/server_files
 
 # misc
 .env
