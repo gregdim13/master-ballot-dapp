@@ -19,6 +19,18 @@ const stringToBigInt = (str) => {
     return BigInt("0x" + hex); // Μετατροπή σε BigInt
 }
 
+
+const copyToClipordAlert = (message, secret) => {
+
+    const text = window.prompt(message, secret);
+
+    if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Copied to clipboard!");
+        }).catch(err => console.error("Failed to copy", err));
+    }
+}
+
 class App extends Component {
     // our react goes in here
     async componentDidMount() {
@@ -322,8 +334,8 @@ class App extends Component {
         const gasPrice = (await provider.getFeeData()).gasPrice; // Τιμή gas από το δίκτυο
         const gasLimit = BigInt(gasEstimate) + BigInt(150000); // Προσθέτουμε μικρό buffer
         const totalCost = BigInt(gasLimit) * BigInt(gasPrice);
-        console.log("Gas Price: ", gasPrice)
-        console.log("Total Gas Price: ", totalCost)
+        // console.log("Gas Price: ", gasPrice)
+        // console.log("Total Gas Price: ", totalCost)
 
         // Εκκίνηση συναλλαγής κατάθεσης
         const txResponse = await this.state.tornado.deposit(depositHash, {
@@ -400,6 +412,15 @@ class App extends Component {
         this.setState({loading: true})
 
         try {
+
+            // Έλεγχος αν ο κωδικός έχει τουλάχιστον 12 χαρακτήρες και περιέχει γράμματα, αριθμούς και σύμβολα
+            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+            if (!strongPasswordRegex.test(password)) {
+                throw new Error("Password Fail");
+            }
+
+            copyToClipordAlert("Copy code secret in a safe place: ", password)
+
             let response = await fetch("http://127.0.0.1:5000/generate-address", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -417,11 +438,7 @@ class App extends Component {
             const nullifier = await this.state.ballot.verifyVoter(data.saltedAddress)
             console.log("Nullifier: ", nullifier)
 
-            // Έλεγχος αν ο κωδικός έχει τουλάχιστον 12 χαρακτήρες και περιέχει γράμματα, αριθμούς και σύμβολα
-            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
-            if (!strongPasswordRegex.test(password)) {
-                throw new Error("Password Fail");
-            }
+            copyToClipordAlert("Copy nullifier in a safe place: ", nullifier)
         
             console.log("Password: ", password)
             //const voteSecret = "G!tH@ck3r2024";
