@@ -146,6 +146,10 @@ contract Ballot {
         return result;
     }
 
+    function getCandidates() public view returns (Candidate[] memory) {
+        return candidates;
+    }
+
     function getAllVotes() public view returns (uint256[] memory) {
         return allVoteCommitments;
     }

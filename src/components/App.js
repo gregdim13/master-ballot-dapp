@@ -718,24 +718,19 @@ class App extends Component {
     fetchCandidates = async () => {
 
         const candidatesCount = await this.state.ballot.candidatesCount();
-        let Candidates = [];
-
-        for (let i = 0; i < candidatesCount; i++) {
-            const candidate = await this.state.ballot.candidates(i);
-            const candidateName = ethers.decodeBytes32String(candidate.name); // Μετατροπή σε string
-    
-            // Προσθήκη αντικειμένου με name και voteCount
-            Candidates.push({
-                name: candidateName,
-                voteCount: candidate.voteCount,
-            });
-        }
-
+        const candidatesRaw = await this.state.ballot.getCandidates(); // Παίρνουμε ΟΛΟΥΣ τους υποψηφίους
+        
+        // Μετατρέπουμε τα δεδομένα σε ένα array με αναγνωρίσιμα strings
+        const Candidates = candidatesRaw.map(candidate => ({
+            name: ethers.decodeBytes32String(candidate.name),
+            voteCount: candidate.voteCount.toString() // Βεβαιωνόμαστε ότι είναι string
+        }));
+        
         this.setState({ 
             candidateNum: candidatesCount.toString(),
             candidates: Candidates,
             curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString()
-         });
+        });
     };
 
 
