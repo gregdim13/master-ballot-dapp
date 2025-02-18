@@ -1,0 +1,91 @@
+.transparent-table {
+    --bs-table-bg: transparent !important; 
+    border: 1px solid white !important; /* Λευκό border */
+}
+
+.transparent-table th,
+.transparent-table td {
+    border-color: white !important; /* Λευκό border για τα κελιά */
+    color: white !important; /* Κείμενο λευκό */
+    border-left: 1px solid transparent  !important; 
+    border-right: 1px solid transparent  !important; 
+}
+
+.table-info {
+    --bs-table-bg: transparent !important; 
+    border: 1px solid #0d47a1 !important; /* Λευκό border */
+}
+
+.table-info th,
+.table-info td {
+    border-color: #0d47a1 !important; /* Λευκό border για τα κελιά */
+    color: #0d47a1 !important; /* Κείμενο λευκό */
+    border-left: 1px solid transparent  !important; 
+    border-right: 1px solid transparent  !important; 
+}
+
+.card {
+    color: #0d47a1 !important; /* Κείμενο λευκό */
+    opacity: .9;
+}
+
+/* Στυλ για το input tag */
+input[type="text"] {
+    color: #0d47a1; /* Χρώμα κειμένου */
+    border: 2px solid #0d47a1; /* Χρώμα περιγράμματος */
+    border-radius: 5px; /* Ελαφρώς στρογγυλεμένες γωνίες */
+    padding: 8px; /* Εσωτερικό περιθώριο */
+    font-size: 16px; /* Μέγεθος γραμματοσειράς */
+    transition: all 0.3s ease-in-out; /* Ομαλή μετάβαση στα εφέ hover και focus */
+}
+
+/* Εφέ hover */
+input[type="text"]:hover {
+    background-color: #e3f2fd; /* Ανοιχτό γαλάζιο φόντο */
+    border-color: #64b5f6; /* Ανοιχτότερο γαλάζιο περίγραμμα */
+}
+
+/* Εφέ focus (όταν ο χρήστης πληκτρολογεί) */
+input[type="text"]:focus {
+    outline: none; /* Αφαίρεση της προεπιλεγμένης εμφάνισης focus */
+    background-color: #ababfa63; /* Πιο έντονο γαλάζιο φόντο */
+    border-color: #2196f3; /* Πιο έντονο γαλάζιο περίγραμμα */
+    box-shadow: 0 0 5px #1f96f8; /* Εφέ φωτισμού γύρω από το input */
+}
+
+.form-select {
+    color: #0d47a1; /* Χρώμα κειμένου */
+    border: 2px solid #0d47a1; /* Χρώμα περιγράμματος */
+}
+
+.form-select:hover {
+    background-color: #e3f2fd; /* Ανοιχτό γαλάζιο φόντο */
+    border-color: #64b5f6; /* Ανοιχτότερο γαλάζιο περίγραμμα */
+    box-shadow: 0 0 5px #64b5f6; /* Εφέ φωτισμού γύρω από το input */
+}
+
+.nav-icon img {
+    filter: invert(100%);
+    transition: filter 0.3s ease;
+  }
+  
+.nav-icon:hover img {
+    filter: brightness(0) saturate(100%) invert(72%) sepia(18%) saturate(1350%) hue-rotate(195deg) brightness(98%) contrast(92%);
+}
+
+.nav-icon:hover {
+    color: #86b2f5;
+}
+
+.chairperson-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    filter: invert(19%) sepia(99%) saturate(746%) hue-rotate(197deg) brightness(96%) contrast(104%);
+}
+
+
+
+
+
+

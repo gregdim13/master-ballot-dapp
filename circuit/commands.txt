@@ -1,0 +1,14 @@
+<    npm install circomlib circom_tester chai mocha @types/mocha   >
+
+
+Μέσω του git bash πηγαίνουμε στο φάκελο C:/master-dapp και εκτελούμε τα scripts μας
+
+1) Έλεγχος για το αν είναι εγκατεστημένο το circom
+ > bash scripts/01_prerequisite.sh
+
+2) Για να κάνουμε compile το circuit και να παράγουμε το witness εκτελούμε το 
+(απαραίτητο το: npm install circomlib):
+> bash scripts/02_compile.sh SimpleMultiplier
+
+3) Καλούμε το επόμενο script για να κάνουμε verify, prove και για να παράξουμε το verifier sol αρχείο του circuit μας:
+> bash scripts/03_executePOT.sh SimpleMultiplier 15
