@@ -156,8 +156,8 @@ contract Ballot {
 
     function issueBallotResults(uint[] memory votes) onlyOwner public {
         // Εδώ θα ελέγχεται εάν έχει λήξη η ψηφοφορία
-        require(startupTime !=0, "The voting process hasn't started yet");
-        require(block.timestamp > endTime, "The voting process hasn't completed yet.");
+        require(startupTime !=0, "The voting process hasn't started yet. Results cannot be issued before the ballot is finished.");
+        require(block.timestamp > endTime, "The voting process hasn't completed yet. Results cannot be issued before the ballot is finished.");
 
         for (uint8 p = 0; p < candidates.length; p++) {
             candidates[p].voteCount = votes[p];
@@ -165,17 +165,6 @@ contract Ballot {
 
         issuedResults = true;
     }
-
-    // event DebugInputs(uint256[2] pA, uint256[2][2] pB, uint256[2] pC, uint256[2] pubSignals);
-
-    // ZK proof is generated in the browser and submitted as a transaction w/ the proof as bytes. --- GROTH16
-    // function submitProof(uint256[2] calldata _pA, uint256[2][2] calldata _pB, uint256[2] calldata _pC, uint256[2] calldata _pubSignals) external returns (bool) {
-    //     // emit DebugInputs(_pA, _pB, _pC, _pubSignals);
-    //     bool result = IGroth16Verifier(groth16VerifierAddress).verifyProof(_pA, _pB, _pC, _pubSignals);
-    //     emit ProofResult(result);           // Το emit και το require πάνε μαζί για να πάρουμε αποτέλεσμα true
-    //     require(result, "Access denied: Invalid Proof.");   // εάν αφαιρέσουμε το require το emit θα μας δίνει πάντα false (δεν γνωρίζω το λόγο...??)
-    //     return result;
-    // }
 }
 
     

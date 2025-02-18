@@ -639,20 +639,21 @@ class App extends Component {
         this.setState({loading: true})
         try {
 
+            await this.state.ballot.callStatic.issueBallotResults([0]) // τσεκάρει αν έχει ολοκληρωθεί η ψηφοφορία
+            
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();
             console.log("Blockchain Vote Commitments:", voteCommitments);
 
             // 🔹 Convert `BigInt` values to strings before sending them in JSON
             const formattedCommitments = voteCommitments.map(vote => vote.toString());
-            console.log("Candidates: ", this.state.candidateNum);
 
             // Στέλνουμε τον αριθμό τον candidateNum για να βρούμε τα αποτελέσματα
             const response = await fetch("http://127.0.0.1:5000/get-final-results", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
-                    candidateNum: this.state.candidateNum,
+                    candidates: this.state.candidateNum,
                     voteCommitments: formattedCommitments,
                     address: this.state.account
                  })
