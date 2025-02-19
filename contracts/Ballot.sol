@@ -23,7 +23,7 @@ contract Ballot {
     bool public issuedResults;
     address public groth16VerifierAddress;
 
-    //here goes zkp changes
+    // here goes zkp changes
     mapping(address => bytes32) private voters;         // Αποθηκεύει το nullifier κάθε registered voter
     mapping(uint256 => bool) public hasVoted;           // Αποτροπή διπλοψηφίας με δείκτη το nullifierHash
     mapping(uint256 => bool) public voteCommitments;    // Αποθήκευση των commitments με δείκτη το voteCommitment
@@ -41,7 +41,6 @@ contract Ballot {
         issuedResults=false;
     }
     
-
     // Modifier για έλεγχο δικαιωμάτων
     modifier onlyOwner() {
         require(msg.sender == chairperson, "Only chairperson has access to this function!");
@@ -119,8 +118,6 @@ contract Ballot {
         hasVoted[nullifierHash] = true;
         voteCommitments[voteCommitment] = true;
         allVoteCommitments.push(voteCommitment);
-
-        emit VoteSubmitted(voteCommitment, nullifierHash);  // ==> Δεν ξέρω αν πρέπει να μπει σίγουρα ???
     }
 
     function proveYourVote(

@@ -267,11 +267,12 @@ async function getFinalResults(req, res, ballotContract) {
                 const poseidon = await buildPoseidon();
                 // 1️⃣ Υπολογισμός του πρώτου hash
                 const firstHash = poseidon([index, voteSecret]);
-                console.log("firstHash: ", firstHash);
+
                 // 2️⃣ Εφαρμογή δεύτερου Poseidon Hash και μετατροπή σε String
                 const voteCommitment = poseidon.F.toString(poseidon([firstHash]));
+                console.log("firstHash: ", firstHash);
                 console.log("voteCommitment: ", voteCommitment);
-                
+
                 // 3️⃣ Έλεγχος αν το voteCommitment υπάρχει στο blockchain
                 if (voteCommitments.includes(voteCommitment)) {
                     voteResults[index] += 1;

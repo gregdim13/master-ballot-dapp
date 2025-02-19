@@ -29,7 +29,7 @@ export default async function deploy() {
     console.log('Verifier deployed to: ', contractVerifierAddress);
 
 
-    const ballot = await Ballot.deploy(180, contractVerifierAddress);  // 25200 7 ώρες
+    const ballot = await Ballot.deploy(500, contractVerifierAddress);  // 25200 7 ώρες
     await ballot.waitForDeployment();
     const contractBallotAddress = ballot.target;
     console.log('Ballot deployed to: ', contractBallotAddress);

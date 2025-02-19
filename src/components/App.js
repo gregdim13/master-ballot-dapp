@@ -8,7 +8,7 @@ import FakeTornado from '../artifacts/contracts/FakeTornado.sol/FakeTornado.json
 import Main from './Main.js';
 import ParticleSettings from './ParticleSettings.js';
 import {ethers} from "ethers";
-// npx hardhat run scripts/deploy.js --network localhost && server/node server.js
+// npx hardhat run scripts/deploy.js --network localhost && node server/server.js
 /* global BigInt */
 
 
@@ -101,8 +101,7 @@ class App extends Component {
 
                 const endTime = stgLimit + startupTime
 
-                if (startupTime) console.log("Elections started at:", getFormattedDate(startupTime));
-                if (endTime>stgLimit) console.log("Elections will finish at:", getFormattedDate(endTime));
+                if (startupTime) console.log("Elections start time on", getFormattedDate(startupTime), "and end time on", getFormattedDate(endTime));
 
                 const issRes = await ballot.issuedResults();
                 const votersLength = await ballot.votersCount()
@@ -426,10 +425,10 @@ class App extends Component {
 
         try {
 
-            // Έλεγχος αν ο κωδικός έχει τουλάχιστον 12 χαρακτήρες και περιέχει γράμματα, αριθμούς και σύμβολα
-            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{12,}$/;
+            // Έλεγχος αν ο κωδικός έχει τουλάχιστον 16 χαρακτήρες και περιέχει γράμματα, αριθμούς και σύμβολα
+            const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()*$^#_\-+=<>]).{16,}$/;
             if (!strongPasswordRegex.test(password)) {
-                throw new Error("Password Fail");
+                throw new Error("Secret Code Fail");
             }
 
             copyToClipordAlert("Copy code secret in a safe place: ", password)
@@ -541,9 +540,9 @@ class App extends Component {
             }
             else {
                 // Έλεγχος αν περιέχει τη φράση "Error: Assert Failed"
-                if (error.message.includes("Password Fail")) {
-                    errorMessage = "Error: Incorrect code syntax!!"
-                    window.alert("Your vote secret must be at least 12 characters long and contain: \n - At least one uppercase letter\n - At least one lowercase letter\n - At least one number\n - At least one special character (@$!%*?&)");
+                if (error.message.includes("Secret Code Fail")) {
+                    errorMessage = "Error: Incorrect secret code syntax!!"
+                    window.alert("Your vote secret must be at least 16 characters long and contain: \n - At least one uppercase letter\n - At least one lowercase letter\n - At least one number\n - At least one special character");
                     labId = 4
                 }
                 else {

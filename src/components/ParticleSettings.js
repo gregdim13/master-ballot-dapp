@@ -43,7 +43,7 @@ const ParticleSettings = () => {
                             quantity: 4,
                         },
                         repulse: {
-                            distance: 200,
+                            distance: 170,
                             duration: 0.4,
                         },
                     },
