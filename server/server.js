@@ -262,12 +262,17 @@ async function getFinalResults(req, res, ballotContract) {
 
         // Βρόχος για όλους τους ψηφοφόρους που έχουν `vote_secret`
         for (const voteSecret of storedVoteSecrets) {
-            for (let index=0; index<candidates; index++) {
-                // Υπολογισμός του voteCommitment για την πιθανή ψήφο
-                const poseidon = await buildPoseidon();  // Χρήση της buildPoseidon()
-                const voteCommitment = poseidon.F.toString(poseidon([index, voteSecret]));
-
-                // Αν το voteCommitment υπάρχει στο blockchain, τότε η ψήφος ανήκει σε αυτόν τον υποψήφιο
+            for (let index = 0; index < candidates; index++) {
+                // Χρήση της buildPoseidon() για hashing
+                const poseidon = await buildPoseidon();
+                // 1️⃣ Υπολογισμός του πρώτου hash
+                const firstHash = poseidon([index, voteSecret]);
+                console.log("firstHash: ", firstHash);
+                // 2️⃣ Εφαρμογή δεύτερου Poseidon Hash και μετατροπή σε String
+                const voteCommitment = poseidon.F.toString(poseidon([firstHash]));
+                console.log("voteCommitment: ", voteCommitment);
+                
+                // 3️⃣ Έλεγχος αν το voteCommitment υπάρχει στο blockchain
                 if (voteCommitments.includes(voteCommitment)) {
                     voteResults[index] += 1;
                 }

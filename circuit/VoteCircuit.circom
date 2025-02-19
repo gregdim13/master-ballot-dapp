@@ -4,26 +4,30 @@ include "../node_modules/circomlib/circuits/poseidon.circom"; // Χρήση το
 
 template VoteCircuit() {
     // Μυστικές Είσοδοι (Private Inputs)
-    signal input vote;           // Επιλογή του χρήστη (θα προέρχεται από τη λίστα προτάσεων)
-    signal input vote_secret;    // Μυστικός κωδικός του ψηφοφόρου
+    signal input vote;           // Επιλογή του χρήστη (από λίστα υποψηφίων)
+    signal input vote_secret;    // Μυστικός κωδικός ψηφοφόρου
     signal input nullifier;      // Τυχαίος αριθμός για αποτροπή διπλοψηφίας
 
     // Δημόσιες Έξοδοι (Public Outputs)
-    signal output vote_commitment;  // Hash της ψήφου (αποθηκεύεται στο smart contract)
-    signal output nullifier_hash;   // Hash για αποτροπή διπλοψηφίας
+    signal output vote_commitment;  // Τελικό Hash της ψήφου
+    signal output nullifier_hash;   // Τελικό Hash για αποτροπή διπλοψηφίας
 
-    // 1️⃣ Χρησιμοποιούμε το Poseidon ως component για σωστή λειτουργία
-    component poseidon1 = Poseidon(1);
-    component poseidon2 = Poseidon(2);
+    // 1️⃣ Δημιουργία Poseidon components
+    component poseidon1 = Poseidon(1);  // Hash του nullifier
+    component poseidon2 = Poseidon(2);  // Hash της ψήφου
+    component poseidon3 = Poseidon(1);  // 2ο Hash του nullifier
+    component poseidon4 = Poseidon(1);  // 2ο Hash της ψήφου
 
-    // 2️⃣ Δημιουργία του nullifier hash
+    // 2️⃣ Δημιουργία του nullifier_hash με διπλό hashing
     poseidon1.inputs[0] <== nullifier;
-    nullifier_hash <== poseidon1.out;
+    poseidon3.inputs[0] <== poseidon1.out;  // 2ο Hash
+    nullifier_hash <== poseidon3.out;
 
-    // 3️⃣ Δημιουργία του vote_commitment
+    // 3️⃣ Δημιουργία του vote_commitment με διπλό hashing
     poseidon2.inputs[0] <== vote;
     poseidon2.inputs[1] <== vote_secret;
-    vote_commitment <== poseidon2.out;
+    poseidon4.inputs[0] <== poseidon2.out;  // 2ο Hash
+    vote_commitment <== poseidon4.out;
 }
 
 component main = VoteCircuit();

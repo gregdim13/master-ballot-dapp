@@ -29,7 +29,7 @@ export default async function deploy() {
     console.log('Verifier deployed to: ', contractVerifierAddress);
 
 
-    const ballot = await Ballot.deploy(300, contractVerifierAddress);  // 25200 7 ώρες
+    const ballot = await Ballot.deploy(180, contractVerifierAddress);  // 25200 7 ώρες
     await ballot.waitForDeployment();
     const contractBallotAddress = ballot.target;
     console.log('Ballot deployed to: ', contractBallotAddress);
@@ -76,7 +76,7 @@ export default async function deploy() {
 
     console.log("Artifacts updated with deployed contract address!");
 
-    const filePath = path.join(__dirname, "../server_files/vote-secrets.txt");
+    const filePath = path.join(__dirname, "../server/files/vote-secrets.txt");
 
     try {
       await fs.promises.unlink(filePath);
