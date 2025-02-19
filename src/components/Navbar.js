@@ -48,6 +48,8 @@ class Navbar extends Component {
                                         style={{ 
                                             marginLeft: '30px', 
                                             color: 'red',
+                                            fontSize: '14px',
+                                            marginLeft: '10px'
                                         }} 
                                     >
                                         {this.props.labelId === 7 ? this.props.txMsg : ''}
@@ -64,7 +66,7 @@ class Navbar extends Component {
                     <ul className="navbar-nav px-4">
                         <li className="text-nowrap nav-item d-block">
                             <span style={{ color: "white", fontSize: "15px" }}>
-                                <b>ACCOUNT NUMBER:</b> {this.props.account}
+                                <b>ACCOUNT:</b> {this.props.account}
                             </span>
                         </li>
                     </ul>

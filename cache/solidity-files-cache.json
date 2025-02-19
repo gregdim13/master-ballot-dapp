@@ -184,8 +184,8 @@
       ]
     },
     "C:\\master-ballot-dapp\\contracts\\Groth16Verifier.sol": {
-      "lastModificationDate": 1739862737471,
-      "contentHash": "091a1e861410e746e7e910f369bd0ec5",
+      "lastModificationDate": 1739969228170,
+      "contentHash": "67fb7e9cc5d52761b46e4802e302c23b",
       "sourceName": "contracts/Groth16Verifier.sol",
       "solcConfig": {
         "version": "0.8.28",

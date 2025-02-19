@@ -20,6 +20,7 @@ const PORT = process.env.SERVER_PORT || 5000;
 // Διαδρομή για αποθήκευση των vote secrets
 const voteFilesDir = path.join(__dirname, "files");
 const filePath = path.join(voteFilesDir, "vote-secrets.txt");
+
 const zkeyFilename = "public/zkp/VoteCircuit_final.zkey";
 const wasmFilename = "public/zkp/VoteCircuit.wasm";
 

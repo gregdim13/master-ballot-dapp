@@ -7,8 +7,10 @@
  > bash scripts/01_prerequisite.sh
 
 2) Για να κάνουμε compile το circuit και να παράγουμε το witness εκτελούμε το 
-(απαραίτητο το: npm install circomlib):
-> bash scripts/02_compile.sh SimpleMultiplier
+(απαραίτητο το: npm install circomlib) αφού πρώτα αφαιρέσουμε την γραμμή "type": "module"  από το package.json για να τρέξει σε CommonJs:
+> bash scripts/02_compile.sh VoteCircuit
+
+
 
 3) Καλούμε το επόμενο script για να κάνουμε verify, prove και για να παράξουμε το verifier sol αρχείο του circuit μας:
-> bash scripts/03_executePOT.sh SimpleMultiplier 15
+> bash scripts/03_executePOT.sh VoteCircuit 15
