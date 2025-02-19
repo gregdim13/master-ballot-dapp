@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import './Main.css'; 
-import chairperson from "../chairperson.svg";
+import chairperson from "../assets/chairperson.svg";
 
 class Main extends Component {
 
@@ -49,7 +49,7 @@ class Main extends Component {
                             >
                                 <div style={{borderSpace: '0 1em'}}>
                                     <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Candidate Name: </b></label>
-                                    <img src={chairperson} alt="ChairPerson" width="32" className="chairperson-icon"/>
+                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
                                     <div className='mb-3'>
                                         <input 
                                             ref={(input) => {this.candidateInput  = input}}
@@ -86,7 +86,7 @@ class Main extends Component {
                             >
                                 <div style={{borderSpace: '0 1em'}}>
                                     <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Voter Address: </b></label>
-                                    <img src={chairperson} alt="ChairPerson" width="32" className="chairperson-icon"/>
+                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
                                     <div className='mb-3'>
                                         <input 
                                             ref={(input) => {this.voterInput  = input}}
@@ -120,7 +120,7 @@ class Main extends Component {
                             >
                                 <div style={{borderSpace: '0 1em'}}>
                                     <label className='float-left mt-2 mb-2' style={{marginLeft: '10px'}}><b>Press the button to issue final voting results</b></label> <br/>
-                                    <img src={chairperson} alt="ChairPerson" width="32" className="chairperson-icon"/>
+                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
                                     <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>ISSUE RESULTS</button> 
                                     <label id='5' className='float-left' 
                                         style={{ 

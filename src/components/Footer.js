@@ -1,6 +1,6 @@
 import React from "react";
 import { FaLinkedin, FaEnvelope, FaUniversity, FaEthereum, FaGithub } from "react-icons/fa"; // npm install react-icons
-import metamaskLogo from "../metamask.svg"; // Βάλε το logo στον φάκελο assets
+import metamaskLogo from "../assets/metamask.svg"; // Βάλε το logo στον φάκελο assets
 import './Footer.css'; 
 
 const Footer = () => {

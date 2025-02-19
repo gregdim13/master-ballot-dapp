@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import ethereumLogo from "../ethereum-logo.svg";
+import ethereumLogo from "../assets/ethereum-logo.svg";
 
 
 const ParticleSettings = () => {

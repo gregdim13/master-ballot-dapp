@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
-import vote from '../vote.svg'
+import vote from '../assets/vote.svg'
 import { FormGroup, FormControlLabel, Switch } from "@mui/material";       // npm install @mui/material @emotion/react @emotion/styled
 import Airdrop from './Airdrop.js'
 import './Navbar.css'; 
-import chairperson from "../chairperson.svg";
+import chairperson from "../assets/chairperson.svg";
 
 class Navbar extends Component {
     // our react goes in here
@@ -14,7 +14,7 @@ class Navbar extends Component {
                  display: "flex", 
                  backgroundColor: "rgba(0, 0, 0, 0.7)", 
                  backdropFilter: "blur(5px)", 
-                 minHeight: "80px" 
+                 minHeight: "90px" 
             }} >
                 <a className="navbar-brand nav-icon col-sm-3 col-md-2 me-0 d-flex align-items-center" href="http://localhost:3000/">
                     &nbsp;&nbsp;&nbsp;&nbsp;

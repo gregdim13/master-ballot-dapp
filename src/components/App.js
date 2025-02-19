@@ -8,7 +8,7 @@ import FakeTornado from '../artifacts/contracts/FakeTornado.sol/FakeTornado.json
 import Main from './Main.js';
 import ParticleSettings from './ParticleSettings.js';
 import {ethers} from "ethers";
-// npx hardhat run scripts/deploy.js --network localhost && node server.js
+// npx hardhat run scripts/deploy.js --network localhost && server/node server.js
 /* global BigInt */
 
 
@@ -19,7 +19,6 @@ const stringToBigInt = (str) => {
     return BigInt("0x" + hex); // Μετατροπή σε BigInt
 }
 
-
 const copyToClipordAlert = (message, secret) => {
 
     const text = window.prompt(message, secret);
@@ -29,6 +28,22 @@ const copyToClipordAlert = (message, secret) => {
             alert("Copied to clipboard!");
         }).catch(err => console.error("Failed to copy", err));
     }
+}
+
+const getFormattedDate = (timestamp) => {
+
+    const date = new Date(Number(timestamp) * 1000);
+    // Μορφοποίηση της ημερομηνίας
+    const formattedDate = date.toLocaleString("en-GB", {
+        weekday: "long",  // Πλήρης ημέρα (Monday, Tuesday...)
+        year: "numeric",  // Έτος (2025)
+        month: "long",    // Πλήρης μήνας (February)
+        day: "numeric",   // Ημέρα (19)
+        hour: "2-digit",  // Ώρα (24ωρη μορφή)
+        minute: "2-digit" // Λεπτά
+    });
+
+    return formattedDate;
 }
 
 class App extends Component {
@@ -78,11 +93,7 @@ class App extends Component {
 
                 const startupTime = await ballot.startupTime();  
                 const curTimestamp = BigInt(Math.floor(Date.now() / 1000));
-                console.log("Current Timestamp:", curTimestamp.toString() + "n");
-
-                let stgLimit =  await ballot.stageLimit();
-
-                console.log("Elections started at:", startupTime.toString());
+                const stgLimit =  await ballot.stageLimit();
 
                 startupTime === BigInt(0) ? 
                     this.setState({startVoting: false}) : 
@@ -90,9 +101,11 @@ class App extends Component {
 
                 const endTime = stgLimit + startupTime
 
-                const issRes = await ballot.issuedResults();
+                if (startupTime) console.log("Elections started at:", getFormattedDate(startupTime));
+                if (endTime>stgLimit) console.log("Elections will finish at:", getFormattedDate(endTime));
 
-                let votersLength = await ballot.votersCount()
+                const issRes = await ballot.issuedResults();
+                const votersLength = await ballot.votersCount()
 
                 this.setState({
                         startupTime: startupTime.toString(),
@@ -225,7 +238,7 @@ class App extends Component {
                 console.log("Error Message: ", error.reason); 
             }
             else {
-                errorMessage = "Error registering Candidates: " + (error?.message || error);
+                errorMessage = "Error registering Candidates: " + (error?.reason || error?.message || error);
                 console.error(errorMessage);
             }
 
@@ -301,7 +314,7 @@ class App extends Component {
                     errorMessage = "Error: Assert Failed due to the constraints."
                     console.error(errorMessage);
                 } else {
-                    errorMessage = "Error registering Voters: " + (error?.message || error);
+                    errorMessage = "Error registering Voters: " + (error?.reason || error?.message || error);
                     console.error(errorMessage);
                 }
             }
@@ -535,7 +548,7 @@ class App extends Component {
                 }
                 else {
                     // Έλεγχος για μήνυμα σφάλματος
-                    errorMessage = "Error during voting procedure: " + (error?.message || error);
+                    errorMessage = "Error during voting procedure: " + (error?.reason || error?.message || error);
                     window.alert(errorMessage);
                     labId = 3
                 }
@@ -618,7 +631,7 @@ class App extends Component {
             }
             else {
                     // Έλεγχος για μήνυμα σφάλματος
-                    errorMessage = "Error during prove procedure: " + (error?.message || error);
+                    errorMessage = "Error during prove procedure: " + (error?.reason || error?.message || error);
                     window.alert(errorMessage);
             }
             console.error(error.message);
@@ -699,7 +712,7 @@ class App extends Component {
             }
             else {
                 // Έλεγχος για μήνυμα σφάλματος
-                errorMessage = "Error: " + (error?.message || error);
+                errorMessage = "Error: " + (error?.reason || error?.message || error);
                 console.error(errorMessage);
             }
 
