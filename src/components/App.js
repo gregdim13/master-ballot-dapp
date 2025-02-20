@@ -51,6 +51,7 @@ class App extends Component {
     async componentDidMount() {
         console.log("Loading Blockchain Data...");
         await this.loadBlockchainData();
+        this.setState({savedScrollPosition: window.scrollY})
 
         // Ανίχνευση αλλαγής λογαριασμού στο metamask
         if (window.ethereum) {
@@ -63,6 +64,13 @@ class App extends Component {
                     await this.loadBlockchainData();
                 }
             });
+        }
+    }
+
+    componentDidUpdate() {
+        // Αν αλλάζει το loading από true σε false, επανέφερε τη θέση κύλισης
+        if (!this.state.loading) {
+            window.scrollTo(0, this.state.savedScrollPosition);
         }
     }
 
@@ -153,7 +161,7 @@ class App extends Component {
     }
 
     startElections = async () => {
-        this.setState({ loading: true }); 
+        this.setState({ loading: true, savedScrollPosition: window.scrollY }); 
 
         try {
 
@@ -190,7 +198,7 @@ class App extends Component {
                 console.log("Error Message: ", error.reason); 
             }
             else {
-                errorMessage = "Error: " + (error?.message || error);
+                errorMessage = "Error: " + (error?.reason || error?.message || error);
                 console.error(errorMessage);
             }
             window.alert(errorMessage);
@@ -206,7 +214,7 @@ class App extends Component {
     
     // register functions
     registerCandidates = async (candidateName) => {
-        this.setState({ loading: true });   
+        this.setState({ loading: true,  savedScrollPosition: window.scrollY});   
 
         try {
             const nameBytes32 = ethers.encodeBytes32String(candidateName);
@@ -255,7 +263,7 @@ class App extends Component {
 
     registerVoters = async (voterAddress) => {
         
-        this.setState({loading: true})
+        this.setState({loading: true, savedScrollPosition: window.scrollY})
 
         try {
             if (!ethers.isAddress(voterAddress)) {
@@ -421,7 +429,7 @@ class App extends Component {
     
     voteCandidate = async (index, password) => {
         let labId
-        this.setState({loading: true})
+        this.setState({loading: true,  savedScrollPosition: window.scrollY})
 
         try {
 
@@ -567,8 +575,9 @@ class App extends Component {
     }
 
     proveVote = async () => {
-        this.setState({loading: true})
 
+        this.setState({ loading: true,  savedScrollPosition: window.scrollY })
+        
         try {
             let response = await fetch("http://127.0.0.1:5000/generate-address", {
                 method: "POST",
@@ -646,12 +655,13 @@ class App extends Component {
             labelId: 6,
             curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString()
         })
+
     }
 
 
     // 3️⃣ Συνάρτηση που καταμετράει τις ψήφους
     countVotes = async () => {
-        this.setState({loading: true})
+        this.setState({loading: true, savedScrollPosition: window.scrollY})
         try {
             
             if (this.state.curTimestamp <= this.state.endTime) throw new Error("Results cannot be issued before the ballot is finished.")
@@ -752,6 +762,8 @@ class App extends Component {
 
     showElectionsResults = async () => {
 
+        this.setState({savedScrollPosition: window.scrollY})
+
         await this.fetchCandidates()
 
         if (this.state.issuedResults) {
@@ -803,7 +815,8 @@ class App extends Component {
             txMsg: '',
             errorTrig: false,
             labelId: 0,
-            chairperson: false
+            chairperson: false,
+            savedScrollPosition: 0
         }
     }
 

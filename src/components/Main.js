@@ -142,15 +142,9 @@ class Main extends Component {
 
                     <form 
                         onSubmit={(event) => {
-
                             event.preventDefault();
                             let voterPassword = this.passInput.value.toString()
-                            // const submittedButton = event.nativeEvent.submitter;
-                            // if (submittedButton.id == "btn-vote") {
-                            //     console.log("Test Test")
                             this.props.voteCandidate(this.state.candidateIndex, voterPassword)
-                            // else 
-                            //     this.props.proveVote();
                         }}
                         className='mx-2 mb-2 mt-2' 
                     >
@@ -207,6 +201,10 @@ class Main extends Component {
                             </div>
                         </div>
                     </form>
+                </div>
+
+                <div className='card mb-2'>
+
                     <form 
                         onSubmit={(event) => {
                             event.preventDefault();
@@ -215,18 +213,21 @@ class Main extends Component {
                         className='mx-2 mb-1 mt-1' 
                     > 
                         <div className='mb-2'>
-                                    <button type='submit' id="btn-prove" className='btn btn-primary btn-lg btn-block'>PROVE YOUR VOTE</button>
-                                    <label id='6'
-                                        style={{ 
-                                            marginLeft: '15px', 
-                                            color: this.props.errorTrig ? 'red' : 'green',
-                                        }} 
-                                    >
-                                        { this.props.labelId === 6 ? this.props.txMsg : '' }
-                                    </label>
+                            <label className='float-left my-2' style={{marginLeft: '10px'}}><b>Press the button to prove your participation in the electoral process</b></label>
+                            <br />
+                            <button type='submit' id="btn-prove" className='btn btn-primary btn-lg btn-block'>PROVE YOUR VOTE</button>
+                            <label id='6'
+                                style={{ 
+                                    marginLeft: '15px', 
+                                    color: this.props.errorTrig ? 'red' : 'green',
+                                }} 
+                            >
+                                { this.props.labelId === 6 ? this.props.txMsg : '' }
+                            </label>
                         </div>
                     </form>
-                </div>                       
+                </div> 
+
                 <div className='card mb-2'>
 
                     <form 
@@ -237,7 +238,7 @@ class Main extends Component {
                         className='mx-2 mb-2 mt-2' 
                     >
                         <div style={{borderSpace: '0 1em'}}>
-                            <label className='float-left mt-2 mb-2' style={{marginLeft: '10px'}}><b>Press the button to show final voting results</b></label> <br/>
+                            <label className='float-left mt-1 mb-2' style={{marginLeft: '10px'}}><b>Press the button to show final voting results</b></label> <br/>
                             <button type='submit' className='btn btn-primary btn-lg btn-block'>SHOW RESULTS</button> 
                             <div className='mt-4'>
                                 <label className='float-left' style={{marginLeft: '10px', fontWeight: "bold", fontSize: "18px"}}>
