@@ -789,9 +789,7 @@ class App extends Component {
         })
     }
 
-
     setChairperson = async (prev) => this.setState({ chairperson: !prev});
-
 
     constructor(props) {
         super(props)
@@ -889,47 +887,38 @@ export default App;
 //  npm list --depth=0
 //  το tsparticle πρέπει να έχει την ίδια version με react-tsparticles!!! (v.2)
 
-// my-dapp@0.1.0 C:\master-dapp
+// my-dapp@0.1.0 C:\master-ballot-dapp
+// +-- @emotion/react@11.14.0
+// +-- @emotion/styled@11.14.0
+// +-- @eslint/js@9.19.0
+// +-- @mui/material@6.4.4
 // +-- @nomicfoundation/hardhat-toolbox@5.0.0
-// +-- artifacts@ extraneous -> .\artifacts
+// +-- assert@2.1.0
 // +-- bootstrap@5.3.3
+// +-- buffer@6.0.3
+// +-- circomlib@2.0.5
+// +-- circomlibjs@0.1.7
+// +-- cors@2.8.5
 // +-- cra-template@1.2.0
+// +-- crypto-browserify@3.12.1
+// +-- dotenv@16.4.7
+// +-- eslint-plugin-react@7.37.4
+// +-- eslint@8.57.1
 // +-- ethers@6.13.5
+// +-- globals@15.14.0
 // +-- hardhat@2.22.18
+// +-- process@0.11.10
+// +-- react-app-rewired@2.2.1
 // +-- react-dom@18.3.1
+// +-- react-icons@5.4.0
 // +-- react-scripts@5.0.1
 // +-- react-tsparticles@2.12.2
 // +-- react@18.3.1
+// +-- snarkjs@0.7.5
 // +-- solidity-coverage@0.8.14
+// +-- stream-browserify@3.0.0
+// +-- timers-browserify@2.0.12
 // +-- tsparticles@2.12.0
 // +-- web-vitals@4.2.4
-// `-- web3@4.16.0
-
-
-// defi-tutorial@0.1.0 C:\udemy-dapp\defi-staking-app-starter\defi-staking-app-starter
-// +-- @types/jest@26.0.24
-// +-- @types/node@16.3.1
-// +-- @types/react-dom@17.0.9
-// +-- @types/react@17.0.14
-// +-- babel-polyfill@6.26.0
-// +-- babel-preset-env@1.7.0
-// +-- babel-preset-es2015@6.24.1
-// +-- babel-preset-stage-2@6.24.1
-// +-- babel-preset-stage-3@6.24.1
-// +-- babel-register@6.26.0
-// +-- bootstrap@4.3.1
-// +-- chai-as-promised@7.1.1
-// +-- chai-bignumber@3.0.0
-// +-- chai@4.2.0
-// +-- ethers@6.13.5
-// +-- identicon.js@2.3.3
-// +-- react-bootstrap@1.0.0-beta.5
-// +-- react-dom@16.8.4
-// +-- react-particles-js@3.5.3
-// +-- react-scripts@2.1.3
-// +-- react-tsparticles@1.31.2
-// +-- react@16.8.4
-// +-- solc@0.8.6
-// +-- truffle@5.1.39
-// +-- typescript@4.3.5
-// `-- web3@1.2.11
+// +-- web3@4.16.0
+// `-- webpack@5.88.2
