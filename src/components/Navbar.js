@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import vote from '../assets/vote.svg'
 import { FormGroup, FormControlLabel, Switch } from "@mui/material";       // npm install @mui/material @emotion/react @emotion/styled
-import Airdrop from './Airdrop.js'
+import Timer from './Timer.js'
 import './Navbar.css'; 
 import chairperson from "../assets/chairperson.svg";
 
@@ -56,7 +56,7 @@ class Navbar extends Component {
                                     </label>
                             </form>
                         :
-                            <Airdrop curTimestamp={this.props.curTimestamp} endTime={this.props.endTime}/> )
+                            <Timer curTimestamp={this.props.curTimestamp} endTime={this.props.endTime}/> )
                     :
                     <></>
                 }
