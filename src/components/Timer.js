@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Airdrop extends Component {
+class Timer extends Component {
     constructor(props) {
         super(props);
         const remainingTime = Math.max(0, parseInt(this.props.endTime, 10) - parseInt(this.props.curTimestamp, 10)); // Εμποδίζουμε αρνητικές τιμές
@@ -64,4 +64,4 @@ class Airdrop extends Component {
     }
 }
 
-export default Airdrop;
+export default Timer;
