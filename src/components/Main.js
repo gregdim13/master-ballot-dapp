@@ -36,262 +36,260 @@ class Main extends Component {
                     </tbody>
                 </table>
 
-                {this.props.chairperson ?
-                    <div className='block mb-2'>
-                        <div className='card mb-2 mt-2'>
-                            <form 
-                                onSubmit={(event) => {
-                                    event.preventDefault()
-                                    let candidateName = this.candidateInput.value.toString();
-                                    this.props.registerCandidates(candidateName)
-                                }}
-                                className='mx-2 mb-2 mt-2' 
-                            >
-                                <div style={{borderSpace: '0 1em'}}>
-                                    <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Candidate Name: </b></label>
-                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
+                <div className='block mb-2'>
+                    {this.props.chairperson ?
+                        <div className='block mb-2'>
+                            <div className='card mb-2 mt-2' id='candidateNameInput'>
+                                <form 
+                                    onSubmit={(event) => {
+                                        event.preventDefault()
+                                        let candidateName = this.candidateInput.value.toString();
+                                        this.props.registerCandidates(candidateName)
+                                    }}
+                                    className='mx-2 mb-2 mt-2' 
+                                >
+                                    <div style={{borderSpace: '0 1em'}}>
+                                        <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Candidate Name: </b></label>
+                                        <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
+                                        <div className='mb-3'>
+                                            <input 
+                                                ref={(input) => {this.candidateInput  = input}}
+                                                type='text'
+                                                placeholder='Enter Candidate Name'
+                                                required
+                                                style= {{width: '30%'}}
+                                            />
+                                            <label id='1' className='float-left' 
+                                                style={{ 
+                                                    marginLeft: '15px', 
+                                                    color: this.props.errorTrig ? 'red' : 'green'
+                                                }} 
+                                            >
+                                                {this.props.labelId === 1 ? this.props.txMsg : ''}
+                                            </label>
+                                        </div>
+                                        <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>REGISTER CANDIDATE</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className='card mb-2' id='voterAddressInput'>
+                                <form 
+                                    onSubmit={(event) => {
+                                        event.preventDefault()
+                                        let voterAddress = this.voterInput.value.toString()
+                                        this.props.registerVoters(voterAddress)
+
+                                        // Καθαρίζουμε το input μετά την υποβολή
+                                        this.voterInput.value = "";
+                                    }}
+                                    className='mx-2 mb-2 mt-2' 
+                                >
+                                    <div style={{borderSpace: '0 1em'}}>
+                                        <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Voter Address: </b></label>
+                                        <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
+                                        <div className='mb-3'>
+                                            <input 
+                                                ref={(input) => {this.voterInput  = input}}
+                                                type='text'
+                                                placeholder="Enter Voter's Address"
+                                                required
+                                                style= {{width: '30%'}}                                          
+                                            />
+                                            <label id='2' className='float-left' 
+                                                style={{ 
+                                                    marginLeft: '15px', 
+                                                    color: this.props.errorTrig ? 'red' : 'green'
+                                                }} 
+                                            >
+                                                {this.props.labelId === 2 ? this.props.txMsg : ''}
+                                            </label>
+                                        </div>
+                                        <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>REGISTER VOTER</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div className='card mb-2' id='issueVotingResults'>
+                                <form 
+                                    onSubmit={(event) => {
+                                        event.preventDefault()
+                                        //this.props.findWinner()
+                                        this.props.countVotes()
+                                    }}
+                                    className='mx-2 mb-2 mt-2' 
+                                >
+                                    <div style={{borderSpace: '0 1em'}}>
+                                        <label className='float-left mt-2 mb-2' style={{marginLeft: '10px'}}><b>Press the button to issue final voting results</b></label> <br/>
+                                        <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
+                                        <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>ISSUE RESULTS</button> 
+                                        <label id='5' className='float-left' 
+                                            style={{ 
+                                                marginLeft: '15px', 
+                                                color: this.props.errorTrig ? 'red' : 'green'
+                                            }} 
+                                        >
+                                            {this.props.labelId === 5 ? this.props.txMsg : ''}
+                                        </label>
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    :
+                    <></>}
+                          
+                    <div className='card mb-2'>
+
+                        <form 
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                let voterPassword = this.passInput.value.toString()
+                                this.props.voteCandidate(this.state.candidateIndex, voterPassword)
+                            }}
+                            className='mx-2 mb-2 mt-2' 
+                        >
+                            <div style={{borderSpace: '0 1em'}}>
+                                <div className='mb-1' >
+                                    <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Please select the candidate you want to vote for: </b></label>
+                                    <select 
+                                        className="form-select"
+                                        value={this.state.candidateIndex} // Σύνδεση με το state
+                                        onChange={this.handleSelectChange} // Ενημέρωση του state όταν αλλάζει η επιλογή
+                                        required
+                                        style= {{width: '50%'}}
+                                    >
+                                        <option disabled key='-1' defaultValue='-1'>Select candidate</option>
+                                        {this.props.candidates && this.props.candidates.map((candidate, index) => (
+                                            <option key={index} value={index}>{index+1}. {candidate.name}</option>
+                                        ))}
+                                    </select>
+                                    <label className='float-left mt-3' style={{marginLeft: '10px'}}>    <b>Please enter a secret code:</b>
+                                        <span 
+                                            onClick={() => alert("Your vote secret must be at least 12 characters long and contain: \n - At least one uppercase letter\n - At least one lowercase letter\n - At least one number\n - At least one special character (@$!%*?&)")}
+                                            style={{ marginLeft: '5px', cursor: 'pointer', color: 'blue' }}
+                                        >
+                                            ℹ
+                                        </span>
+                                    </label>
                                     <div className='mb-3'>
                                         <input 
-                                            ref={(input) => {this.candidateInput  = input}}
+                                            ref={(input) => {this.passInput = input}}
                                             type='text'
-                                            placeholder='Enter Candidate Name'
+                                            placeholder="Enter a Password"
                                             required
                                             style= {{width: '30%'}}
                                         />
-                                        <label id='1' className='float-left' 
+                                        <label id='4' className='float-left' 
                                             style={{ 
                                                 marginLeft: '15px', 
                                                 color: this.props.errorTrig ? 'red' : 'green'
                                             }} 
                                         >
-                                            {this.props.labelId === 1 ? this.props.txMsg : ''}
+                                            {this.props.labelId === 4 ? this.props.txMsg : ''}
                                         </label>
                                     </div>
-                                    <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>REGISTER CANDIDATE</button>
-                                </div>
-                            </form>
-                        </div>
 
-                        <div className='card mb-2'>
-                            <form 
-                                onSubmit={(event) => {
-                                    event.preventDefault()
-                                    let voterAddress = this.voterInput.value.toString()
-                                    this.props.registerVoters(voterAddress)
-
-                                    // Καθαρίζουμε το input μετά την υποβολή
-                                    this.voterInput.value = "";
-                                }}
-                                className='mx-2 mb-2 mt-2' 
-                            >
-                                <div style={{borderSpace: '0 1em'}}>
-                                    <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Voter Address: </b></label>
-                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
-                                    <div className='mb-3'>
-                                        <input 
-                                            ref={(input) => {this.voterInput  = input}}
-                                            type='text'
-                                            placeholder="Enter Voter's Address"
-                                            required
-                                            style= {{width: '30%'}}                                          
-                                        />
-                                        <label id='2' className='float-left' 
-                                            style={{ 
-                                                marginLeft: '15px', 
-                                                color: this.props.errorTrig ? 'red' : 'green'
-                                            }} 
-                                        >
-                                            {this.props.labelId === 2 ? this.props.txMsg : ''}
-                                        </label>
-                                    </div>
-                                    <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>REGISTER VOTER</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className='card mb-2'>
-                            <form 
-                                onSubmit={(event) => {
-                                    event.preventDefault()
-                                    //this.props.findWinner()
-                                    this.props.countVotes()
-                                }}
-                                className='mx-2 mb-2 mt-2' 
-                            >
-                                <div style={{borderSpace: '0 1em'}}>
-                                    <label className='float-left mt-2 mb-2' style={{marginLeft: '10px'}}><b>Press the button to issue final voting results</b></label> <br/>
-                                    <img src={chairperson} alt="ChairPerson" width="30" className="chairperson-icon"/>
-                                    <button type='submit' className='btn btn-primary btn-lg btn-block mb-2'>ISSUE RESULTS</button> 
-                                    <label id='5' className='float-left' 
+                                    <button type='submit' id="btn-vote"  className='btn btn-primary btn-lg btn-block'>VOTE</button>
+                                    <label id='3' className='float-left' 
                                         style={{ 
                                             marginLeft: '15px', 
                                             color: this.props.errorTrig ? 'red' : 'green'
                                         }} 
                                     >
-                                        {this.props.labelId === 5 ? this.props.txMsg : ''}
+                                        {this.props.labelId === 3 ? this.props.txMsg : ''}
                                     </label>
-
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                :
-                <></>}
-                          
-                <div className='card mb-2'>
 
-                    <form 
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            let voterPassword = this.passInput.value.toString()
-                            this.props.voteCandidate(this.state.candidateIndex, voterPassword)
-                        }}
-                        className='mx-2 mb-2 mt-2' 
-                    >
-                        <div style={{borderSpace: '0 1em'}}>
-                            <div className='mb-1' >
-                                <label className='float-left mt-2' style={{marginLeft: '10px'}}><b>Please select the candidate you want to vote for: </b></label>
-                                <select 
-                                    className="form-select"
-                                    value={this.state.candidateIndex} // Σύνδεση με το state
-                                    onChange={this.handleSelectChange} // Ενημέρωση του state όταν αλλάζει η επιλογή
-                                    required
-                                    style= {{width: '50%'}}
-                                >
-                                    <option disabled key='-1' defaultValue='-1'>Select candidate</option>
-                                    {this.props.candidates && this.props.candidates.map((candidate, index) => (
-                                        <option key={index} value={index}>{index+1}. {candidate.name}</option>
-                                    ))}
-                                </select>
-                                <label className='float-left mt-3' style={{marginLeft: '10px'}}>    <b>Please enter a secret code:</b>
-                                    <span 
-                                        onClick={() => alert("Your vote secret must be at least 12 characters long and contain: \n - At least one uppercase letter\n - At least one lowercase letter\n - At least one number\n - At least one special character (@$!%*?&)")}
-                                        style={{ marginLeft: '5px', cursor: 'pointer', color: 'blue' }}
-                                    >
-                                        ℹ
-                                    </span>
-                                </label>
-                                <div className='mb-3'>
-                                    <input 
-                                        ref={(input) => {this.passInput = input}}
-                                        type='text'
-                                        placeholder="Enter a Password"
-                                        required
-                                        style= {{width: '30%'}}
-                                    />
-                                    <label id='4' className='float-left' 
-                                        style={{ 
-                                            marginLeft: '15px', 
-                                            color: this.props.errorTrig ? 'red' : 'green'
-                                        }} 
-                                    >
-                                        {this.props.labelId === 4 ? this.props.txMsg : ''}
-                                    </label>
-                                </div>
+                    <div className='card mb-2'>
 
-                                <button type='submit' id="btn-vote"  className='btn btn-primary btn-lg btn-block'>VOTE</button>
-                                <label id='3' className='float-left' 
+                        <form 
+                            onSubmit={(event) => {
+                                event.preventDefault();
+                                this.props.proveVote();
+                            }}
+                            className='mx-2 mb-1 mt-1' 
+                        > 
+                            <div className='mb-2'>
+                                <label className='float-left my-2' style={{marginLeft: '10px'}}><b>Press the button to prove your participation in the electoral process</b></label>
+                                <br />
+                                <button type='submit' id="btn-prove" className='btn btn-primary btn-lg btn-block'>PROVE YOUR VOTE</button>
+                                <label id='6'
                                     style={{ 
                                         marginLeft: '15px', 
-                                        color: this.props.errorTrig ? 'red' : 'green'
+                                        color: this.props.errorTrig ? 'red' : 'green',
                                     }} 
                                 >
-                                    {this.props.labelId === 3 ? this.props.txMsg : ''}
+                                    { this.props.labelId === 6 ? this.props.txMsg : '' }
                                 </label>
                             </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div> 
 
-                <div className='card mb-2'>
+                    <div className='card mb-2'>
 
-                    <form 
-                        onSubmit={(event) => {
-                            event.preventDefault();
-                            this.props.proveVote();
-                        }}
-                        className='mx-2 mb-1 mt-1' 
-                    > 
-                        <div className='mb-2'>
-                            <label className='float-left my-2' style={{marginLeft: '10px'}}><b>Press the button to prove your participation in the electoral process</b></label>
-                            <br />
-                            <button type='submit' id="btn-prove" className='btn btn-primary btn-lg btn-block'>PROVE YOUR VOTE</button>
-                            <label id='6'
-                                style={{ 
-                                    marginLeft: '15px', 
-                                    color: this.props.errorTrig ? 'red' : 'green',
-                                }} 
-                            >
-                                { this.props.labelId === 6 ? this.props.txMsg : '' }
-                            </label>
-                        </div>
-                    </form>
-                </div> 
+                        <form 
+                            onSubmit={(event) => {
+                                event.preventDefault()
+                                this.props.showElectionsResults()
+                            }}
+                            className='mx-2 mb-2 mt-2' 
+                        >
+                            <div style={{borderSpace: '0 1em'}}>
+                                <label className='float-left mt-1 mb-2' style={{marginLeft: '10px'}}><b>Press the button to show final voting results</b></label> <br/>
+                                <button type='submit' className='btn btn-primary btn-lg btn-block'>SHOW RESULTS</button> 
+                                <div className='mt-4'>
+                                    <label className='float-left' style={{marginLeft: '10px', fontWeight: "bold", fontSize: "18px"}}>
 
-                <div className='card mb-2'>
-
-                    <form 
-                        onSubmit={(event) => {
-                            event.preventDefault()
-                            this.props.showElectionsResults()
-                        }}
-                        className='mx-2 mb-2 mt-2' 
-                    >
-                        <div style={{borderSpace: '0 1em'}}>
-                            <label className='float-left mt-1 mb-2' style={{marginLeft: '10px'}}><b>Press the button to show final voting results</b></label> <br/>
-                            <button type='submit' className='btn btn-primary btn-lg btn-block'>SHOW RESULTS</button> 
-                            <div className='mt-4'>
-                                <label className='float-left' style={{marginLeft: '10px', fontWeight: "bold", fontSize: "18px"}}>
-
-                                    { this.props.pressResults ?
+                                        { this.props.pressResults ?
+                                            (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
+                                                    'The winner is ' + this.props.finalCandidates[0].name + ' with ' + this.props.finalCandidates[0].voteCount + ' votes.' 
+                                                    : 
+                                                    <span style={{fontWeight: 'normal', color: 'red'}}>Elections results have not issued yet.</span>
+                                            )
+                                            :
+                                            <></>
+                                        }
+                                    </label> 
+                                    {this.props.pressResults ?
                                         (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
-                                                'The winner is ' + this.props.finalCandidates[0].name + ' with ' + this.props.finalCandidates[0].voteCount + ' votes.' 
-                                                : 
-                                                <span style={{fontWeight: 'normal', color: 'red'}}>Elections results have not issued yet.</span>
-                                        )
+                                            
+                                            <div className='mt-1'>
+                                                <br/>
+                                                <table className='table table-bordered table-sm table-info text-center mx-auto' style={{ tableLayout: 'fixed' }}>
+                                                    <thead>
+                                                            <tr className='text-white'>
+                                                                <th scope='col'>Rank</th>
+                                                                <th scope='col'>Candidate Name</th>
+                                                                <th scope='col'>Votes</th>
+                                                            </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {this.props.finalCandidates && this.props.finalCandidates.map((finalCandidates, index) => (
+                                                                <tr key={index}>
+                                                                    <td>{index+1}</td>
+                                                                    <td>{finalCandidates.name.toString()}</td>
+                                                                    <td>{finalCandidates.voteCount.toString()}</td>
+                                                                </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            :
+                                            <></>)
                                         :
                                         <></>
                                     }
-                                </label> 
-                                {this.props.pressResults ?
-                                    (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
-                                        
-                                        <div className='mt-1'>
-                                            <br/>
-                                            <table className='table table-bordered table-sm table-info text-center mx-auto' style={{ tableLayout: 'fixed' }}>
-                                                <thead>
-                                                        <tr className='text-white'>
-                                                            <th scope='col'>Rank</th>
-                                                            <th scope='col'>Candidate Name</th>
-                                                            <th scope='col'>Votes</th>
-                                                        </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {this.props.finalCandidates && this.props.finalCandidates.map((finalCandidates, index) => (
-                                                            <tr key={index}>
-                                                                <td>{index+1}</td>
-                                                                <td>{finalCandidates.name.toString()}</td>
-                                                                <td>{finalCandidates.voteCount.toString()}</td>
-                                                            </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        :
-                                        <></>)
-                                    :
-                                    <></>
-                                }
+                                </div>
+
                             </div>
-
-                        </div>
-                    </form>
-                </div>                
-                    {/* <div className='card-body text-center' style={{color: 'blue'}}>
-                        AIRDROP <Airdrop stakingBalance={this.props.stakingBalance}/>
-                    </div> */}
-                <br/><br/><br/>
-
+                        </form>
+                    </div>                
+                    <br/><br/><br/>
+                </div>
             </div>
         )
     }
