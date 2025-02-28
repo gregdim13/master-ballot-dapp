@@ -1,7 +1,6 @@
-<    npm install circomlib circom_tester chai mocha @types/mocha   >
+<  npm install circomlib circom_tester chai mocha @types/mocha   >
 
-
-Μέσω του git bash πηγαίνουμε στο φάκελο C:/master-dapp και εκτελούμε τα scripts μας
+Μέσω του git bash πηγαίνουμε στο φάκελο C:/master-ballot-dapp και εκτελούμε τα scripts μας
 
 1) Έλεγχος για το αν είναι εγκατεστημένο το circom
  > bash scripts/01_prerequisite.sh
@@ -9,7 +8,6 @@
 2) Για να κάνουμε compile το circuit και να παράγουμε το witness εκτελούμε το 
 (απαραίτητο το: npm install circomlib) αφού πρώτα αφαιρέσουμε την γραμμή "type": "module"  από το package.json για να τρέξει σε CommonJs:
 > bash scripts/02_compile.sh VoteCircuit
-
 
 
 3) Καλούμε το επόμενο script για να κάνουμε verify, prove και για να παράξουμε το verifier sol αρχείο του circuit μας:

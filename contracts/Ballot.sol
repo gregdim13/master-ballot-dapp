@@ -163,5 +163,3 @@ contract Ballot {
         issuedResults = true;
     }
 }
-
-    

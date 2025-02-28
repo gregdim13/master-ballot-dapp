@@ -139,7 +139,7 @@ class Main extends Component {
                     :
                     <></>}
                           
-                    <div className='card mb-2'>
+                    <div className='card mb-2' id='submitVote'>
 
                         <form 
                             onSubmit={(event) => {
@@ -204,7 +204,7 @@ class Main extends Component {
                         </form>
                     </div>
 
-                    <div className='card mb-2'>
+                    <div className='card mb-2' id='proveVote'>
 
                         <form 
                             onSubmit={(event) => {
@@ -229,7 +229,7 @@ class Main extends Component {
                         </form>
                     </div> 
 
-                    <div className='card mb-2'>
+                    <div className='card mb-2' id='showResults'>
 
                         <form 
                             onSubmit={(event) => {
