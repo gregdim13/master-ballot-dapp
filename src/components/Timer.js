@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Hourglass } from "react-loader-spinner";
 
 class Timer extends Component {
     constructor(props) {
@@ -56,10 +57,26 @@ class Timer extends Component {
     }
 
     render() {
+
+        const duration = this.state.seconds > 0 ? this.state.seconds * 1000 : 1500;
         return (
+
             <span className="ms-1 text-warning" style={{ fontSize: "18px", fontWeight: "bold" }}>
+                {this.state.seconds > 0 && (
+                    <Hourglass
+                        visible={true}
+                        height="22"
+                        width="22"
+                        ariaLabel="hourglass-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="hourglass-wrapper"
+                        colors={['#FFD700', '#ece497']} // Δύο αποχρώσεις κίτρινου
+                        duration={duration}
+                    />
+                )}
                 ⏳ Time: {String(this.state.time.h).padStart(2, "0")}:{String(this.state.time.m).padStart(2, "0")}:{String(this.state.time.s).padStart(2, "0")}
             </span>
+
         );
     }
 }
