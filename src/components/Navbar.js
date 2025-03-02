@@ -16,7 +16,9 @@ class Navbar extends Component {
                  backdropFilter: "blur(5px)", 
                  minHeight: "90px" 
             }} >
-                <a className="navbar-brand nav-icon col-sm-3 col-md-2 me-0 d-flex align-items-center" href="http://localhost:3000/">
+                <a className="navbar-brand nav-icon col-sm-3 col-md-1 me-0 d-flex align-items-center" 
+                    href="http://localhost:3000/"
+                    style={{paddingLeft: "5px"}}>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <img
                     src={vote}
@@ -31,7 +33,7 @@ class Navbar extends Component {
                         <span>Application</span>
                     </div>
                 </a>
-                <div className="col-auto ms-4">
+                <div className="col-auto ms-4" style={{paddingLeft: "100px"}}>
                 {
                     !this.props.loading ? 
                         (!this.props.startVoting ?
