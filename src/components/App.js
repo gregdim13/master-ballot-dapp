@@ -8,6 +8,7 @@ import FakeTornado from '../artifacts/contracts/FakeTornado.sol/FakeTornado.json
 import Main from './Main.js';
 import ParticleSettings from './ParticleSettings.js';
 import {ethers} from "ethers";
+import { RotatingLines } from "react-loader-spinner";
 // npx hardhat run scripts/deploy.js --network localhost && node server/server.js
 /* global BigInt */
 
@@ -823,7 +824,18 @@ class App extends Component {
         let content
 
         this.state.loading ? 
-        content = <p id='loader' className='text-center' style={{margin:'40px', color:'white'}}>
+        content = <p id='loader' className='text-center' style={{margin:'40px', color:'#041530', fontSize:"24px", fontWeight: "bold"}}>
+                    <RotatingLines
+                        visible={true}
+                        height="42"
+                        width="42"
+                        strokeColor="#041530"
+                        strokeWidth="5"
+                        animationDuration="0.75"
+                        ariaLabel="rotating-lines-loading"
+                        className="text-white stroke-white"
+                    />
+                    &nbsp;
                     LOADING PLEASE...
                 </p> 
         : 

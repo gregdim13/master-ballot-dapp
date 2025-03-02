@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Hourglass } from "react-loader-spinner";
+import { BsHourglassBottom  } from "react-icons/bs";
 
 class Timer extends Component {
     constructor(props) {
@@ -57,24 +58,24 @@ class Timer extends Component {
     }
 
     render() {
-
-        const duration = this.state.seconds > 0 ? this.state.seconds * 1000 : 1500;
         return (
 
-            <span className="ms-1 text-warning" style={{ fontSize: "18px", fontWeight: "bold" }}>
-                {this.state.seconds > 0 && (
-                    <Hourglass
-                        visible={true}
-                        height="22"
-                        width="22"
-                        ariaLabel="hourglass-loading"
-                        wrapperStyle={{}}
-                        wrapperClass="hourglass-wrapper"
-                        colors={['#FFD700', '#ece497']} // Δύο αποχρώσεις κίτρινου
-                        duration={duration}
-                    />
-                )}
-                ⏳ Time: {String(this.state.time.h).padStart(2, "0")}:{String(this.state.time.m).padStart(2, "0")}:{String(this.state.time.s).padStart(2, "0")}
+            <span className="ms-1" style={{ fontSize: "18px", fontWeight: "bold", verticalAlign: "center", color: "white"}}>
+                {/* Εμφανίζει το υπολειπόμενο χρόνο σε μορφή ⏳ Time: h:m:s */}
+                <Hourglass
+                    visible={ this.state.seconds > 0 ? true : false}
+                    height="28"
+                    width="28"
+                    ariaLabel="hourglass-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="hourglass-wrapper"
+                    colors={['#306cce', '#72a1ed']} // Δύο αποχρώσεις κίτρινου  '#FFD700', '#ece497'
+                />
+                { this.state.seconds <= 0 ? <BsHourglassBottom  size={30} color={"#306cce"}/> : <></> }
+                &nbsp;
+                Time: {String(this.state.time.h).padStart(2, "0")}: 
+                      {String(this.state.time.m).padStart(2, "0")}:
+                      {String(this.state.time.s).padStart(2, "0")}
             </span>
 
         );
