@@ -9,6 +9,12 @@ const __dirname = path.dirname(__filename);
 
 export default async function deploy() {
 
+    const electionDuration = parseInt(process.env.ELECTION_DURATION, 10) || 3600; // αν δεν οριστεί στο cmd η μεταβλητή περιβάλλοντος τότε παίρνει τιμή 3600
+    if (isNaN(electionDuration)) {
+        throw new Error("ELECTION_DURATION is not set or not a valid number.");
+    }
+    console.log('Elections Duratuion (sec): ', electionDuration);
+
     //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
     let wallet = (await ethers.getSigners())[0];
     console.log("Deploying contracts with the account:", wallet.address);
@@ -29,7 +35,7 @@ export default async function deploy() {
     console.log('Verifier deployed to: ', contractVerifierAddress);
 
 
-    const ballot = await Ballot.deploy(28800, contractVerifierAddress);  // 25200 7 ώρες
+    const ballot = await Ballot.deploy(electionDuration, contractVerifierAddress);  // 25200 7 ώρες
     await ballot.waitForDeployment();
     const contractBallotAddress = ballot.target;
     console.log('Ballot deployed to: ', contractBallotAddress);

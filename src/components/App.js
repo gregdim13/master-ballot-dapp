@@ -9,7 +9,7 @@ import Main from './Main.js';
 import ParticleSettings from './ParticleSettings.js';
 import {ethers} from "ethers";
 import { RotatingLines } from "react-loader-spinner";
-// npx hardhat run scripts/deploy.js --network localhost && node server/server.js
+// set ELECTION_DURATION=60 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
 /* global BigInt */
 
 
