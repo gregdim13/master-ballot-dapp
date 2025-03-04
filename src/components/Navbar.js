@@ -22,8 +22,8 @@ class Navbar extends Component {
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <img
                     src={vote}
-                    width="48"
-                    height="48"
+                    width="64"
+                    height="64"
                     className="d-inline-block align-top"
                     alt="bank"
                     />
@@ -33,7 +33,7 @@ class Navbar extends Component {
                         <span>Application</span>
                     </div>
                 </a>
-                <div className="col-auto ms-4" style={{paddingLeft: "100px"}}>
+                <div className="col-auto ms-4" style={{paddingLeft: "110px"}}>
                 {
                     !this.props.loading ? 
                         (!this.props.startVoting ?

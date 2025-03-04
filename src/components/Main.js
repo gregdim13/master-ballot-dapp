@@ -57,7 +57,7 @@ class Main extends Component {
                                                 type='text'
                                                 placeholder='Enter Candidate Name'
                                                 required
-                                                style= {{width: '30%'}}
+                                                style= {{width: '35%'}}
                                             />
                                             <label id='1' className='float-left' 
                                                 style={{ 
@@ -94,7 +94,7 @@ class Main extends Component {
                                                 type='text'
                                                 placeholder="Enter Voter's Address"
                                                 required
-                                                style= {{width: '30%'}}                                          
+                                                style= {{width: '35%'}}                                          
                                             />
                                             <label id='2' className='float-left' 
                                                 style={{ 
@@ -157,7 +157,7 @@ class Main extends Component {
                                         value={this.state.candidateIndex} // Σύνδεση με το state
                                         onChange={this.handleSelectChange} // Ενημέρωση του state όταν αλλάζει η επιλογή
                                         required
-                                        style= {{width: '50%'}}
+                                        style= {{width: '35%'}}
                                     >
                                         <option disabled key='-1' defaultValue='-1'>Select candidate</option>
                                         {this.props.candidates && this.props.candidates.map((candidate, index) => (
@@ -178,7 +178,7 @@ class Main extends Component {
                                             type='text'
                                             placeholder="Enter a Password"
                                             required
-                                            style= {{width: '30%'}}
+                                            style= {{width: '35%'}}
                                         />
                                         <label id='4' className='float-left' 
                                             style={{ 
