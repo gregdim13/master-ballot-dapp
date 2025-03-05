@@ -155,6 +155,7 @@ contract Ballot {
         // Εδώ θα ελέγχεται εάν έχει λήξη η ψηφοφορία
         require(startupTime !=0, "The voting process hasn't started yet. Results cannot be issued before the ballot is finished.");
         require(block.timestamp > endTime, "The voting process hasn't completed yet. Results cannot be issued before the ballot is finished.");
+        require(!issuedResults, "The final ballot results has already been  issued!");
 
         for (uint8 p = 0; p < candidates.length; p++) {
             candidates[p].voteCount = votes[p];
