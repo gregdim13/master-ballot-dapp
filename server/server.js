@@ -171,6 +171,11 @@ async function relayVote(req, res, ballotContract) {
         // ✅ **Έλεγχος αν η υπογραφή είναι έγκυρη**
         if (verifiedAddress.toLowerCase() !== newWallet.address.toLowerCase()) 
             throw new Error("Invalid signature! Vote rejected.")
+        
+        const gasCost = await ballotContract.submitVote.estimateGas(proofA, proofB, proofC, publicSignals);
+        const gasPrice = (await provider.getFeeData()).gasPrice; // Τιμή gas από το δίκτυο
+        console.log("Gas Cost: ", gasCost)
+        console.log("Gas Price: ", gasPrice)
 
         // ✅ **Εκτέλεση της ψήφου με το νέο ανώνυμο wallet**
         const tx = await ballotContract.connect(newWallet).submitVote(proofA, proofB, proofC, publicSignals, {gasCost: gasCost, gasPrice: 1000000000n});
