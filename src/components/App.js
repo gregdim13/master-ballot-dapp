@@ -9,7 +9,7 @@ import Main from './Main.js';
 import ParticleSettings from './ParticleSettings.js';
 import {ethers} from "ethers";
 import { RotatingLines } from "react-loader-spinner";
-// set ELECTION_DURATION=60 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
+// set ELECTION_DURATION=3600 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
 /* global BigInt */
 
 
@@ -664,8 +664,10 @@ class App extends Component {
     countVotes = async () => {
         this.setState({loading: true, savedScrollPosition: window.scrollY})
         try {
+
+            let curTimestamp = BigInt(Math.floor(Date.now() / 1000));
             
-            if (this.state.curTimestamp <= this.state.endTime) throw new Error("Results cannot be issued before the ballot is finished.")
+            if (curTimestamp <= this.state.endTime) throw new Error("Results cannot be issued before the ballot is finished.")
 
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();

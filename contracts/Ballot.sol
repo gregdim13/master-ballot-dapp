@@ -55,10 +55,11 @@ contract Ballot {
     function startBallot(uint256 curTime) onlyOwner public {
         require(startupTime == 0, "The elections has already been started");
         startupTime = block.timestamp;
-        endTime = startupTime + stageLimit;
 
         if (startupTime > curTime)
             stageLimit= stageLimit - (startupTime - curTime); // για συγχρονισμό ρολογιού και μόνο
+
+        endTime = startupTime + stageLimit;
     }
 
     // only chairperson is able to register candidates to elections
@@ -155,7 +156,7 @@ contract Ballot {
         // Εδώ θα ελέγχεται εάν έχει λήξη η ψηφοφορία
         require(startupTime !=0, "The voting process hasn't started yet. Results cannot be issued before the ballot is finished.");
         require(block.timestamp > endTime, "The voting process hasn't completed yet. Results cannot be issued before the ballot is finished.");
-        require(!issuedResults, "The final ballot results has already been  issued!");
+        require(!issuedResults, "The final ballot results has already been issued!");
 
         for (uint8 p = 0; p < candidates.length; p++) {
             candidates[p].voteCount = votes[p];
