@@ -237,7 +237,7 @@ async function getFinalResults(req, res, ballotContract) {
 
         if (address != chairperson) throw new Error("Only chairperson have the right to issue final ballot results.");
 
-        if (candidates == 0 || voteCommitments == []) throw new Error("The parameters are not defined.");
+        if (candidates == 0 || voteCommitments.length === 0) throw new Error("The parameters are not defined.");
         
         if (!fs.existsSync(filePath)) throw new Error("Vote Secret File does not exist");
         
@@ -247,7 +247,7 @@ async function getFinalResults(req, res, ballotContract) {
             voteResults[i] = 0;
         }
 
-        console.log("Stored Vote Secrets:", voteCommitments)
+        console.log("Stored Vote Commitments:", voteCommitments)
 
         // Διαβάζουμε το αρχείο ως UTF-8
         const data = await fs.promises.readFile(filePath, "utf-8");
