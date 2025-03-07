@@ -669,6 +669,13 @@ class App extends Component {
             
             if (curTimestamp <= this.state.endTime) throw new Error("Results cannot be issued before the ballot is finished.")
 
+            let delay =  (Number(this.state.endTime) + 15) - Number(curTimestamp)
+
+            // Προσθήκη καθυστέρησης ίσον του delay (sec) αν είναι θετικός αριθμός
+            if (delay >= 0)
+                console.log("Delay: ", delay)
+                await new Promise(resolve => setTimeout(resolve, delay * 1000));
+
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();
             console.log("Blockchain Vote Commitments:", voteCommitments);

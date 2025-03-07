@@ -293,7 +293,7 @@ async function getFinalResults(req, res, ballotContract) {
             console.log("❌ Error Message: ", error.reason);
         } else {
             errorMsg = error?.message || error
-            console.error("❌ Error during decoding final results: " + (error?.message || error));
+            console.error("❌ Error during gathering final results: " + (error?.message || error));
         }
         res.status(500).json({ error: errorMsg });
     }
