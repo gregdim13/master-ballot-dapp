@@ -3,63 +3,62 @@ const { ethers } = hardhat;
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+
+// Ορισμός του τρέχοντος αρχείου και του φακέλου όπου βρίσκεται
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 export default async function deploy() {
-
-    const electionDuration = parseInt(process.env.ELECTION_DURATION, 10) || 3600; // αν δεν οριστεί στο cmd η μεταβλητή περιβάλλοντος τότε παίρνει τιμή 3600
+  
+    // Ορισμός της διάρκειας της εκλογικής διαδικασίας (default: 3600 δευτερόλεπτα)
+    const electionDuration = parseInt(process.env.ELECTION_DURATION, 10) || 3600;
     if (isNaN(electionDuration)) {
         throw new Error("ELECTION_DURATION is not set or not a valid number.");
     }
-    console.log('Elections Duratuion (sec): ', electionDuration);
+    console.log('Elections Duration (sec): ', electionDuration);
 
-    //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
+    // Ανάθεση του πρώτου signer (account) από την διαμόρφωση του Hardhat
     let wallet = (await ethers.getSigners())[0];
     console.log("Deploying contracts with the account:", wallet.address);
 
-    //Initialize a contract factory object
-    //wallet/signer used for signing the contract calls/transactions with this contract
+    // Δημιουργία εργοστασιακών αντικειμένων για κάθε συμβόλαιο (contract factory)
     const Ballot = await ethers.getContractFactory("Ballot", wallet);
     const Groth16Verifier = await ethers.getContractFactory("Groth16Verifier", wallet);
     const FakeTornado = await ethers.getContractFactory("FakeTornado", wallet);
 
-    //Using already intilized contract facotry object with our contract, we can invoke deploy function to deploy the contract.
-    //Accepts constructor parameters from our contract
-
+    // Ανάπτυξη του Groth16Verifier smart contract
     const verifier = await Groth16Verifier.deploy();
-    //We use wait to recieve the transaction (deployment) receipt, which contains contractAddress
     await verifier.waitForDeployment();
     const contractVerifierAddress = verifier.target;
     console.log('Verifier deployed to: ', contractVerifierAddress);
 
-
-    const ballot = await Ballot.deploy(electionDuration, contractVerifierAddress);  // 25200 7 ώρες
+    // Ανάπτυξη του Ballot smart contract με παράμετρο τη διάρκεια των εκλογών και τη διεύθυνση του Verifier
+    const ballot = await Ballot.deploy(electionDuration, contractVerifierAddress);
     await ballot.waitForDeployment();
     const contractBallotAddress = ballot.target;
     console.log('Ballot deployed to: ', contractBallotAddress);
 
+    // Ανάπτυξη του FakeTornado smart contract
     const tornado = await FakeTornado.deploy();
     await tornado.waitForDeployment();
     const contractTornadoAddress = tornado.target;  
     console.log("FakeTornado deployed to:", contractTornadoAddress);
 
+    // Ανάκτηση πληροφοριών του δικτύου (chain ID)
     const network = await ethers.provider.getNetwork();
     console.log("Network:", network.chainId);
 
-    // Path to the artifact JSON file
+    // Καθορισμός των διαδρομών των artifact αρχείων των smart contracts
     const artifactBallotPath = path.join(__dirname, "../src/artifacts/contracts/Ballot.sol/Ballot.json");
     const artifactVerifierPath = path.join(__dirname, "../src/artifacts/contracts/Groth16Verifier.sol/Groth16Verifier.json");
     const artifactTornadoPath = path.join(__dirname, "../src/artifacts/contracts/FakeTornado.sol/FakeTornado.json");
 
-
-    // Read the artifact file
+    // Ανάγνωση των artifact JSON αρχείων
     const artifactBallot = JSON.parse(fs.readFileSync(artifactBallotPath, "utf8"));
     const artifactVerifier = JSON.parse(fs.readFileSync(artifactVerifierPath, "utf8"));
     const artifactTornado = JSON.parse(fs.readFileSync(artifactTornadoPath, "utf8"));
 
-    // Add the deployed network info
+    // Προσθήκη πληροφοριών του deployed network στα artifacts
     artifactBallot.networks = artifactBallot.networks || {};
     artifactBallot.networks[network.chainId] = {
       address: contractBallotAddress,
@@ -75,15 +74,15 @@ export default async function deploy() {
       address: contractTornadoAddress,
     };
 
-    // Write back to the artifact file
+    // Ενημέρωση των artifact αρχείων με τις διευθύνσεις των αναπτυγμένων συμβολαίων
     fs.writeFileSync(artifactBallotPath, JSON.stringify(artifactBallot, null, 2));
     fs.writeFileSync(artifactVerifierPath, JSON.stringify(artifactVerifier, null, 2));
     fs.writeFileSync(artifactTornadoPath, JSON.stringify(artifactTornado, null, 2));
 
-    console.log("Artifacts updated with deployed contract address!");
+    console.log("Artifacts updated with deployed contract addresses!");
 
+    // Διαγραφή του αρχείου vote-secrets.txt από τον server αν υπάρχει
     const filePath = path.join(__dirname, "../server/files/vote-secrets.txt");
-
     try {
       await fs.promises.unlink(filePath);
       console.log("The file vote-secrets.txt was deleted from the server.");
@@ -93,144 +92,11 @@ export default async function deploy() {
       }
     }
 
+    // Επιστροφή των διευθύνσεων των αναπτυγμένων συμβολαίων
     return { contractBallotAddress, contractVerifierAddress };
 };
 
+// Κλήση της deploy συνάρτησης και διαχείριση σφαλμάτων
 deploy()
   .then(() => console.log("Deployment ολοκληρώθηκε!"))
   .catch((error) => console.error("Error:", error));
-
-
-
-// const { ethers } = require("hardhat");
-
-// async function main() {
-//     // Πάρε τον πρώτο signer από το τοπικό node
-//     const [deployer] = await ethers.getSigners();
-
-//     console.log("Deploying contracts with the account:", deployer.address);
-
-//     // Δημιουργία του contract factory για το Ballot contract
-//     const Ballot = await ethers.getContractFactory("Ballot");
-
-//     // Deploy το contract με τον επιθυμητό χρόνο περιορισμού (π.χ. 3600)
-//     const ballot = await Ballot.deploy(3600);
-//     await ballot.waitForDeployment();
-//       // The address the Contract WILL have once mined
-//     // See: https://ropsten.etherscan.io/address/0x2bd9aaa2953f988153c8629926d22a6a5f69b14e
-
-//     // console.log(ballot.deployTransaction.hash);
-
-//     // The contract is NOT deployed yet; we must wait until it is mined
-//     // await contract.deployed()
-
-//   // Περιμένουμε να ολοκληρωθεί η συναλλαγή και να πάρουμε τη διεύθυνση του contract
-// //   await ballot.deployed();
-
-//   console.log("Ballot contract deployed to:", ballot.target);
-// }
-
-// // Εκτέλεση της συνάρτησης main
-// main()
-//   .then(() => process.exit(0))  // Αν η εκτέλεση είναι επιτυχής, τερματίζει το process
-//   .catch((error) => {
-//     console.error(error);
-//     process.exit(1);  // Αν υπάρχει σφάλμα, τερματίζει με σφάλμα
-//   });
-
-
-
-
-
-
-// const { ethers } = require("hardhat");
-// console.log("hello");
-
-// async function main() {
-
-//   //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
-//   console.log("hello2");
-//   let wallet = (await ethers.getSigners())[0];
-
-//   //Initialize a contract factory object
-//   //name of contract as first parameter
-//   //wallet/signer used for signing the contract calls/transactions with this contract
-//   const Ballot = await ethers.getContractFactory("Ballot", wallet);
-//   //Using already intilized contract facotry object with our contract, we can invoke deploy function to deploy the contract.
-//   //Accepts constructor parameters from our contract
-//   const ballot = await Ballot.deploy(3600);
-//   //We use wait to recieve the transaction (deployment) receipt, which contains contractAddress
-//   const contractAddress = (await ballot.deployTransaction.wait()).contractAddress;
-//   ballot.deployTransaction.
-
-//   console.log('Greeter deployed to: ', contractAddress);
-
-//   return contractAddress;
-// }
-
-// main()
-//   .then(() => process.exit(0))
-//   .catch(error => {
-//     console.error(error);
-//     process.exit(1);
-// });
-
-
-
-
-// async function main() {
-
-//     const [deployer] = await ethers.getSigners();
-
-//     console.log("Deploying contracts with the account:", deployer.address);
-
-//     const Ballot = await ethers.getContractFactory("Ballot");
-//     const ballot = await Ballot.deploy(3600);
-
-//     console.log("Contract deployed at:", ballot.address);
-
-//     const saySomething = await ballot.speak();
-    
-//     console.log("saySomething value:", saySomething);
-// }
-
-// main()
-//   .then(() => process.exit(0))
-//   .catch(error => {
-//     console.error(error);
-//     process.exit(1);
-// });
-
-
-// async function main() {
-
-//     const Ballot = await ethers.getContractFactory("Ballot");
-//     const ballot = await Ballot.deploy(3600);
-//     // const b = await ballot.deployed()
-  
-//     await ballot.deployed();
-  
-//     console.log("Contract deployed to:", ballot.address);
-//   }
-  
-//   main()
-//     .then(() => process.exit(0))
-//     .catch((error) => {
-//       console.error(error);
-//       process.exit(1);
-//     });
-
-
-// const Ballot = artifacts.require('Ballot');
-
-// module.exports =  async function(deployer, network, accounts) {
-//     // deploy Ballot Contract
-//     await deployer.deploy(Ballot, 60)
-//     const ballot = await Ballot.deployed()
-
-//     // register voters account 1, 2, 3
-//     await ballot.registerVoters(accounts[1])
-//     await ballot.registerVoters(accounts[2])
-//     await ballot.registerVoters(accounts[3])
-// };
-

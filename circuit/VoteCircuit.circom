@@ -10,8 +10,8 @@ template VoteCircuit() {
     signal input nullifier;      // Τυχαίος αριθμός για αποτροπή διπλοψηφίας
 
     // Δημόσιες Έξοδοι (Public Outputs)
-    signal output vote_commitment;  // Τελικό Hash της ψήφου
-    signal output nullifier_hash;   // Τελικό Hash για αποτροπή διπλοψηφίας
+    signal output vote_commitment;      // Τελικό Hash της ψήφου
+    signal output nullifier_hash;       // Τελικό Hash για αποτροπή διπλοψηφίας
 
     // Δημιουργία Poseidon components
     component poseidon1 = Poseidon(1);  // Hash του nullifier

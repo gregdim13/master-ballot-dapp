@@ -2,23 +2,27 @@
 
 #!/bin/bash
 
-# Variable to store the name of the circuit
+# Μεταβλητή για την αποθήκευση του ονόματος του κυκλώματος
 CIRCUIT=''
 
+# Ορισμός του φακέλου εξόδου όπου θα αποθηκευτούν τα αποτελέσματα της μεταγλώττισης
 FOLDER_PATH='build'
 
-# In case there is a circuit name as input
+# Αν υπάρχει όρισμα (όνομα κυκλώματος) κατά την εκτέλεση του script, το αποθηκεύει στη μεταβλητή CIRCUIT
 if [ "$1" ]; then
     CIRCUIT=$1
 fi
 
-# Create a build Folder
+# Δημιουργία του φακέλου build αν δεν υπάρχει ήδη
 if [ ! -d "$FOLDER_PATH" ]; then
   mkdir ${FOLDER_PATH}
 fi
 
-# Compile the circuit
+# Μεταγλώττιση του κυκλώματος χρησιμοποιώντας το circom και δημιουργία των απαραίτητων αρχείων
 circom ./circuit/${CIRCUIT}.circom --r1cs --wasm --sym --c -o ${FOLDER_PATH}
 
-# Generate the witness.wtns
-node ${FOLDER_PATH}/${CIRCUIT}_js/generate_witness.js ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm ./circuit/input.json ${FOLDER_PATH}/${CIRCUIT}_js/witness.wtns
+# Δημιουργία του witness.wtns χρησιμοποιώντας το παραγόμενο WebAssembly αρχείο και τα input δεδομένα
+node ${FOLDER_PATH}/${CIRCUIT}_js/generate_witness.js \
+     ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm \
+     ./circuit/input.json \
+     ${FOLDER_PATH}/${CIRCUIT}_js/witness.wtns

@@ -2,194 +2,103 @@
 import React, { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
-import ethereumLogo from "../assets/ethereum-logo.svg";
-
+import ethereumLogo from "../assets/ethereum-logo.svg";         // Εισαγωγή του λογότυπου του Ethereum ως εικόνα για τα particles
 
 const ParticleSettings = () => {
+    // Συνάρτηση που αρχικοποιεί το σύστημα των particles φορτώνοντας όλα τα modules του tsparticles
     const particlesInit = useCallback(async (engine) => {
         await loadFull(engine);
     }, []);
 
+    // Συνάρτηση που εκτελείται όταν το σύστημα των particles έχει φορτωθεί
     const particlesLoaded = useCallback(async (container) => {
         console.log(container);
     }, []);
 
     return (
         <Particles
-            id="tsparticles"
-            init={particlesInit}
-            loaded={particlesLoaded}
+            id="tsparticles"            // Αναγνωριστικό του component για αναφορά στο DOM
+            init={particlesInit}        // Κλήση της συνάρτησης αρχικοποίησης
+            loaded={particlesLoaded}    // Κλήση της συνάρτησης που εκτελείται μετά τη φόρτωση
             options={{
                 background: {
                     color: {
-                        value: "#0d47a1",
+                        value: "#0d47a1",       // Μπλε φόντο για το εφέ των particles
                     },
                 },
-                fpsLimit: 60,
+                fpsLimit: 60,                   // Μέγιστος αριθμός καρέ ανά δευτερόλεπτο
                 interactivity: {
                     events: {
                         onClick: {
                             enable: true,
-                            mode: "push",
+                            mode: "push",       // Όταν γίνεται κλικ, προστίθενται νέα particles
                         },
                         onHover: {
                             enable: true,
-                            mode: "repulse",
+                            mode: "repulse",    // Όταν ο δείκτης περνάει πάνω από τα particles, απομακρύνονται
                         },
-                        resize: true,
+                    resize: true,               // Προσαρμογή των particles όταν αλλάζει το μέγεθος της οθόνης
                     },
                     modes: {
                         push: {
-                            quantity: 4,
+                            quantity: 4,        // Προσθήκη 4 νέων particles κατά το κλικ
                         },
                         repulse: {
-                            distance: 170,
-                            duration: 0.4,
+                            distance: 170,      // Απόσταση απώθησης των particles κατά το hover
+                            duration: 0.4,      // Διάρκεια της απώθησης
                         },
                     },
                 },
                 particles: {
                     color: {
-                        value: "#ffffff",
+                        value: "#ffffff",       // Χρώμα των particles (λευκό)
                     },
                     links: {
-                        color: "#ffffff",
-                        distance: 150,
-                        enable: true,
-                        opacity: 0.5,
-                        width: 1,
+                        color: "#ffffff",       // Χρώμα των συνδέσεων μεταξύ των particles
+                        distance: 150,          // Απόσταση που πρέπει να έχουν μεταξύ τους για να δημιουργηθεί σύνδεση
+                        enable: true,           // Ενεργοποίηση των συνδέσεων
+                        opacity: 0.5,           // Διαφάνεια των συνδέσεων
+                        width: 1,               // Πάχος των γραμμών σύνδεσης
                     },
-                    // collisions: {
-                    //     enable: true,
-                    // },
                     move: {
-                        direction: "none",
-                        enable: true,
+                        direction: "none",      // Τα particles κινούνται τυχαία
+                        enable: true,           // Ενεργοποίηση της κίνησης
                         outModes: {
-                            default: "bounce",
+                            default: "bounce",  // Όταν φτάσουν στα όρια, αναπηδούν
                         },
-                        random: false,
-                        speed: 3,
-                        minSpeed: 3,
-                        maxSpeed: 3, // Περιορισμός μέγιστης ταχύτητας
-                        straight: false,
+                        random: false,          // Όχι τυχαία ταχύτητα
+                        speed: 3,               // Σταθερή ταχύτητα κίνησης
+                        minSpeed: 3,            // Ελάχιστη ταχύτητα
+                        maxSpeed: 3,            // Μέγιστη ταχύτητα (δεν αλλάζει από την αρχική)
+                        straight: false,        // Δεν κινούνται σε ευθεία γραμμή
                     },
                     number: {
                         density: {
                             enable: true,
-                            area: 800,
+                            area: 800,           // Περιοχή όπου κινούνται τα particles
                         },
-                        value: 80,
+                        value: 80,              // Συνολικός αριθμός των particles
                     },
                     opacity: {
-                        value: 0.5,
+                        value: 0.5,             // Αρχική διαφάνεια των particles
                     },
                     shape: {
-                        type: "image",
+                        type: "image",          // Τα particles θα έχουν τη μορφή εικόνας
                         image: {
-                            src: ethereumLogo,
-                            width: 50,
-                            height: 50,
+                            src: ethereumLogo,  // Χρήση του λογότυπου του Ethereum ως particle
+                            width: 50,          // Πλάτος εικόνας
+                            height: 50,         // Ύψος εικόνας
                         },
                     },
                     size: {
-                        random: true,
-                        value: 12,
+                        random: true,           // Τυχαία μεγέθη στα particles
+                        value: 12,              // Μέσο μέγεθος των particles
                     },
                 },
-                detectRetina: true,
+                detectRetina: true,             // Ενεργοποίηση για καλύτερη ποιότητα στα retina displays
             }}
         />
     );
 };
-
-{/* <Particles
-    id="tsparticles"
-    init={particlesInit}
-    loaded={particlesLoaded}
-    options={{
-        background: {
-            color: {
-                value: "#d11111",
-            },
-        },
-        fpsLimit: 60,
-        interactivity: {
-            events: {
-                onClick: {
-                    enable: true,
-                    mode: "push",
-                },
-                onHover: {
-                    enable: true,
-                    mode: "repulse",
-                },
-                resize: true,
-            },
-            modes: {
-                push: {
-                    quantity: 4,
-                },
-                repulse: {
-                    distance: 200,
-                    duration: 0.4,
-                },
-            },
-        },
-        particles: {
-            color: {
-                value: "#ff69b4", // Ροζ καρδιές
-            },
-            links: {
-                color: "#ff0000", // Κόκκινες γραμμές σύνδεσης
-                distance: 150,
-                enable: true,
-                opacity: 0.8,
-                width: 2,
-            },
-            collisions: {
-                enable: false, // Απενεργοποίηση συγκρούσεων
-            },
-            move: {
-                direction: "none",
-                enable: true,
-                outModes: {
-                    default: "bounce",
-                },
-                random: false,
-                speed: 2, // Χαμηλότερη αρχική ταχύτητα
-                maxSpeed: 2.5, // Περιορισμός μέγιστης ταχύτητας
-                //decay: 0.01, // Σταδιακή επιβράδυνση για αποφυγή επιτάχυνσης
-                straight: false,
-            },
-            number: {
-                density: {
-                    enable: true,
-                    area: 800,
-                },
-                value: 50, // Λίγο λιγότερες καρδιές για καλύτερη αισθητική
-            },
-            opacity: {
-                value: 0.9,
-            },
-            shape: {
-                type: "character",
-                character: {
-                    value: "❤", // Καρδούλες
-                    font: "Verdana",
-                    style: "",
-                    weight: "bold",
-                    fill: true,
-                },
-            },
-            size: {
-                random: true,
-                value: 16, // Μεγαλύτερες καρδιές για να ξεχωρίζουν
-            },
-        },
-        detectRetina: true,
-    }}
-/> */}
-
 
 export default ParticleSettings;
