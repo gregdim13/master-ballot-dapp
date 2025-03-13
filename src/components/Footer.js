@@ -1,13 +1,13 @@
 import React from "react";
-import { FaLinkedin, FaEnvelope, FaUniversity, FaEthereum, FaGithub } from "react-icons/fa"; // npm install react-icons
-import metamaskLogo from "../assets/metamask.svg"; // Βάλε το logo στον φάκελο assets
+import { FaLinkedin, FaEnvelope, FaUniversity, FaEthereum, FaGithub } from "react-icons/fa";  // Εισαγωγή εικονιδίων από react-icons
+import metamaskLogo from "../assets/metamask.svg";     // Εισαγωγή λογοτύπου MetaMask
 import './Footer.css'; 
 
 const Footer = () => {
   return (
     <footer className="text-white d-flex align-items-center py-2" style={{ backgroundColor: "rgba(0, 0, 0, 0.7)", backdropFilter: "blur(5px)", bottom: 0, width: "100%", height:"60px" }}>
       <div className="container-fluid d-flex justify-content-between">
-        
+        {/* Εμφάνιση δημιουργού και πληροφοριών για την τεχνολογία ZKP που χρησιμοποιείται */}
         <div className="text-start py-1">
             &nbsp;&nbsp;
             <small>© 2025  <strong>Grigorios Dimopoulos</strong></small>
@@ -17,6 +17,7 @@ const Footer = () => {
             </small>
         </div>
 
+        {/* Σύνδεσμοι για επαφή με τον δημιουργό και πρόσθετες πληροφορίες */}
         <div className="text-end footer-icons d-flex align-items-center">
             <a href="https://www.linkedin.com/in/grigorios-dimopoulos-357465155/" target="_blank" rel="noopener noreferrer" className="me-3">
                 <FaLinkedin size={27} />
@@ -37,10 +38,10 @@ const Footer = () => {
                 <img src={metamaskLogo} alt="MetaMask" width="32" />
             </a>
         </div>
-
       </div>
     </footer>
   );
 };
 
 export default Footer;
+
