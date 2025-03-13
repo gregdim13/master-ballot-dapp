@@ -244,7 +244,6 @@ async function saveVoteSecret(req, res) {
     }
 }
 
-
 // Συνάρτηση για την καταμέτρηση των τελικών αποτελεσμάτων της ψηφοφορίας
 async function getFinalResults(req, res, ballotContract) {
     try {
@@ -305,7 +304,6 @@ async function getFinalResults(req, res, ballotContract) {
         res.status(500).json({ error: errorMsg });
     }
 }
-
 
 // Συνάρτηση όπου ρυθμίζει τις διαδρομές API του server, διασφαλίζοντας ότι 
 // οι σχετικές μέθοδοι καλούνται ανάλογα με τη διεπαφή που αιτείται ο χρήστης.
