@@ -546,6 +546,14 @@ class App extends Component {
             console.log("✅ Success:", result.message);
             console.log("✅ Transaction: ", result.tx);
 
+            let voteCommitment = await this.state.ballot.proveYourVote(dataProofs.proofA, dataProofs.proofB, dataProofs.proofC, dataProofs.publicSignals);
+            console.log("voteCommitment", voteCommitment);
+            while (!voteCommitment) {
+                console.log("Waiting to prove vote...");
+                await new Promise(resolve => setTimeout(resolve, 2000)); // Καθυστέρηση 2 δευτερολέπτων
+                voteCommitment = await this.state.ballot.proveYourVote(dataProofs.proofA, dataProofs.proofB, dataProofs.proofC, dataProofs.publicSignals);
+            }
+
             // Αποστολή του vote secret του ψηφοφόρου στον server για αποθήκευση
             response = await fetch("http://127.0.0.1:5000/save-vote-secret", {
                 method: "POST",
@@ -720,19 +728,19 @@ class App extends Component {
             if (curTimestamp <= this.state.endTime) 
                 throw new Error("Results cannot be issued before the ballot is finished.");
 
-            let delay = (Number(this.state.endTime) + 15) - Number(curTimestamp);
+            // let delay = (Number(this.state.endTime) + 15) - Number(curTimestamp);
 
             // Προσθήκη καθυστέρησης (σε δευτερόλεπτα) αν το delay είναι θετικό
-            if (delay >= 0) {
-                console.log("Delay: ", delay);
-                await new Promise(resolve => setTimeout(resolve, delay * 1000));
-            }
+            // if (delay >= 0) {
+            //     console.log("Delay: ", delay);
+            //     await new Promise(resolve => setTimeout(resolve, delay * 1000));
+            // }
 
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();
             console.log("Blockchain Vote Commitments:", voteCommitments);
 
-            // Μετατροπή των `BigInt` ψήφων σε string πριν αποσταλούν στο backend
+            // Μετατροπή των 'BigInt' ψήφων σε string πριν αποσταλούν στο backend
             const formattedCommitments = voteCommitments.map(vote => vote.toString());
 
             // Αποστολή των ψήφων στον server για αποκρυπτογράφηση και καταμέτρηση

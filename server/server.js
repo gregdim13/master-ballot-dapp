@@ -198,6 +198,16 @@ async function relayVote(req, res, ballotContract) {
         console.log("✅ Vote transaction confirmed hash: ", receipt.hash);
         console.log("✅ Vote transaction: ", tx);
 
+        // let voteCommitment = await ballotContract.connect(newWallet).proveYourVote(proofA, proofB, proofC, publicSignals, {gasLimit: gasCost, gasPrice: 1000000000n});
+        // console.log("voteCommitment", voteCommitment);
+        // while (!voteCommitment) {
+        //     console.log("Waiting to prove vote...");
+        //     await new Promise(resolve => setTimeout(resolve, 2000)); // Καθυστέρηση 2 δευτερολέπτων
+        //     voteCommitment = await ballotContract.connect(newWallet).proveYourVote(proofA, proofB, proofC, publicSignals, {gasLimit: gasCost, gasPrice: 1000000000n});
+        // }
+
+        console.log("User vote has successfully been proved!");
+
         // Επιστροφή επιτυχίας στον χρήστη στο frontend
         res.json({ message: "You have successfully voted!", tx: tx });
 

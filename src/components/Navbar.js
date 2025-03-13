@@ -17,7 +17,7 @@ class Navbar extends Component {
                 {/* Λογότυπο και σύνδεσμος του DApp που οδηγεί στην αρχική σελίδα */}
                 <a className="navbar-brand nav-icon col-sm-3 col-md-1 me-0 d-flex align-items-center"
                     href="http://localhost:3000/"
-                    style={{paddingLeft: "5px"}}>
+                    style={{paddingLeft: "20px"}}>
                     <img
                         src={vote}
                         width="64"
