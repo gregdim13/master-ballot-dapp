@@ -2,6 +2,9 @@
 
 #!/bin/bash
 
+# Διαγραφή της γραμμής "type": "module", από το αρχείο package.json για να τρέξει σε CommonJs μοντέλο
+sed -i '/"type": "module",/d' package.json
+
 # Μεταβλητή για την αποθήκευση του ονόματος του κυκλώματος
 CIRCUIT=''
 
@@ -29,3 +32,6 @@ node ${FOLDER_PATH}/${CIRCUIT}_js/generate_witness.js \
 
 # Αντιγραφή του .wasm αρχείου στο φάκελο server/zkp/
 cp ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm server/zkp/
+
+# Επαναφορά της γραμμής "type": "module" στο package.json για να τρέχει σε ES (ECMAScript) Modules μοντέλο 
+sed -i '/"private": true,/a \  "type": "module",' package.json
