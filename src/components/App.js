@@ -204,8 +204,25 @@ class App extends Component {
                 startVoting: true,
                 loading: false
             }, await this.loadBlockchainData());
+
         } catch (error) {
-            window.alert(error.message);
+            let errorMessage
+            if (error.data) {
+                console.log("Error: ", error.message); 
+                errorMessage = error.reason
+                console.log("Error Message: ", error.reason); 
+            }
+            else {
+                errorMessage = "Error: " + (error?.reason || error?.message || error);
+                console.error(errorMessage);
+            }
+            window.alert(errorMessage);
+
+            // Αποθήκευση των στοιχείων στο state
+            this.setState({
+                labelId: 7,             // Ετικέτα όπου εμφανίζεται
+                txMsg: errorMessage,    // Μήνυμα σφάλματος
+            })
         }
 
         this.setState({ loading: false });      // Ενημερώνει το state για να βγει από loading screen
@@ -524,7 +541,7 @@ class App extends Component {
             console.log("Signed Vote:", signature);
 
             // Αποστολή της ψήφου στον relayer του server για την υποβολή της ψήφου
-            response = await fetch("http://127.0.0.1:5000/relay", {
+            response = await fetch("http://127.0.0.1:5000/relay-vote", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ 
@@ -533,7 +550,8 @@ class App extends Component {
                     proofC: dataProofs.proofC, 
                     publicSignals: dataProofs.publicSignals,        
                     signature,                                      // Η υπογραφή της ψήφου από το νέο ανώνυμο πορτοφόλι
-                    newWalletPrivateKey: newWallet.privateKey       // Το ιδιωτικό πορτοφόλι του ανώνυμου πορτοφολιού
+                    newWalletPrivateKey: newWallet.privateKey,      // Το ιδιωτικό πορτοφόλι του ανώνυμου πορτοφολιού
+                    voteSecretBigInt: voteSecretBigInt.toString()   // Ο μυστικός κωδικός BigInt με
                 })
             });
 
@@ -546,27 +564,7 @@ class App extends Component {
             console.log("✅ Success:", result.message);
             console.log("✅ Transaction: ", result.tx);
 
-            let voteCommitment = await this.state.ballot.proveYourVote(dataProofs.proofA, dataProofs.proofB, dataProofs.proofC, dataProofs.publicSignals);
-            console.log("voteCommitment", voteCommitment);
-            while (!voteCommitment) {
-                console.log("Waiting to prove vote...");
-                await new Promise(resolve => setTimeout(resolve, 2000)); // Καθυστέρηση 2 δευτερολέπτων
-                voteCommitment = await this.state.ballot.proveYourVote(dataProofs.proofA, dataProofs.proofB, dataProofs.proofC, dataProofs.publicSignals);
-            }
-
-            // Αποστολή του vote secret του ψηφοφόρου στον server για αποθήκευση
-            response = await fetch("http://127.0.0.1:5000/save-vote-secret", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                    voteSecretBigInt: voteSecretBigInt.toString() 
-                })
-            });
-
-            const result2 = await response.json();
-            if (!response.ok) {
-                throw new Error(result2.error); // Ρίχνει error με το μήνυμα του backend
-            }
+            await new Promise(resolve => setTimeout(resolve, 3000));  // Προσθήκη μιας μικρής αναμονής 3 δευτερολέπτων
 
             // Ενημέρωση του χρήστη
             const msg = "You have successfully voted.";
@@ -612,7 +610,8 @@ class App extends Component {
         this.setState({
             loading: false,         // Ενημερώνει το state για να βγει από loading screen 
             labelId: labId,         // Ενημερώνει το state με τον αριθμό ετικέτας που θα εμφανίζεται το μήνυμα
-            curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString()
+            curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString(),
+            lastTimeOfVote: BigInt(Math.floor(Date.now() / 1000)).toString()      // Ενημέρωση με το τρέχοντα χρόνο που υποβλήθηκε η ψήφος
         });
     };
 
@@ -623,6 +622,17 @@ class App extends Component {
         this.setState({ loading: true, savedScrollPosition: window.scrollY });
 
         try {
+            
+            let curTimestamp = BigInt(Math.floor(Date.now() / 1000));                       // Αποθήκευση της τρέχουσας ώρας
+            let delay = (Number(this.state.lastTimeOfVote) + 12) - Number(curTimestamp);    // Υπολογισμός χρόνου καθυστέρησης
+
+            // Προσθήκη καθυστέρησης (16 sec max) για το συγχρονισμό δεδομένων στο hardhat (αν το delay είναι θετικό)
+            // Έτσι αποφεύγονται οι κλήσεις που δίνουν λάθος αποτελέσματα, λόγω της αργής ενημέρωσης το blockchain (hardhat)
+            if (delay >= 0) {
+                console.log("Delay: ", delay);
+                await new Promise(resolve => setTimeout(resolve, delay * 1000));
+            }
+
             // Αποστολή αιτήματος στον server για τη δημιουργία salted address
             let response = await fetch("http://127.0.0.1:5000/generate-address", {
                 method: "POST",
@@ -721,20 +731,21 @@ class App extends Component {
         this.setState({ loading: true, savedScrollPosition: window.scrollY });
 
         try {
-            // Αποθήκευση της τρέχουσας ώρας
-            let curTimestamp = BigInt(Math.floor(Date.now() / 1000));
+            
+            let curTimestamp = BigInt(Math.floor(Date.now() / 1000));       // Αποθήκευση της τρέχουσας ώρας
             
             // Έλεγχος αν η ψηφοφορία έχει λήξει πριν εκδοθούν τα αποτελέσματα
             if (curTimestamp <= this.state.endTime) 
                 throw new Error("Results cannot be issued before the ballot is finished.");
 
-            // let delay = (Number(this.state.endTime) + 15) - Number(curTimestamp);
+            let delay = (Number(this.state.endTime) + 12) - Number(curTimestamp);       // Υπολογισμός χρόνου καθυστέρησης
 
-            // Προσθήκη καθυστέρησης (σε δευτερόλεπτα) αν το delay είναι θετικό
-            // if (delay >= 0) {
-            //     console.log("Delay: ", delay);
-            //     await new Promise(resolve => setTimeout(resolve, delay * 1000));
-            // }
+            // Προσθήκη καθυστέρησης (16 sec max) για το συγχρονισμό δεδομένων στο hardhat (αν το delay είναι θετικό)
+            // Έτσι αποφεύγονται οι κλήσεις που δίνουν λάθος αποτελέσματα, λόγω της αργής ενημέρωσης το blockchain (hardhat)
+            if (delay >= 0) {
+                console.log("Delay: ", delay);
+                await new Promise(resolve => setTimeout(resolve, delay * 1000));
+            }
 
             // Λήψη όλων των voteCommitments από το smart contract
             const voteCommitments = await this.state.ballot.getAllVotes();
@@ -899,7 +910,8 @@ class App extends Component {
             errorTrig: false,       // Αν έχει προκύψει σφάλμα
             labelId: 0,             // Αναγνωριστικό για UI ειδοποιήσεις
             chairperson: false,     // Αν ο χρήστης είναι ο διαχειριστής (chairperson)
-            savedScrollPosition: 0  // Θέση κύλισης πριν από τη φόρτωση
+            savedScrollPosition: 0, // Θέση κύλισης πριν από τη φόρτωση
+            lastTimeOfVote: '0'     // Προεπιλεγμένος χρόνος τελευταίας ψήφου
         };
     }
 

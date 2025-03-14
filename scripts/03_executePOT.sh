@@ -62,9 +62,15 @@ sed -i 's/0.6.11;/0.8.4;/g' ${CIRCUIT}Verifier.sol
 # Ενημέρωση του ονόματος του smart contract στον verifier
 sed -i "s/contract Verifier/contract ${CIRCUIT^}Verifier/g" ${CIRCUIT}Verifier.sol
 
-# Μετακίνηση του παραγόμενου Solidity verifier στον φάκελο των smart contracts
-mv ./${CIRCUIT}Verifier.sol ../contracts
+# Διαγραφή του παλιού Solidity verifier στον φάκελο των smart contracts
+rm -f ./contracts/Groth16Verifier.sol
+
+# Αντιγραφή του παραγόμενου Solidity verifier στον φάκελο των smart contracts και μετονομασία σε 'Groth16Verifier.sol'
+cp ./${CIRCUIT}Verifier.sol ./contracts/Groth16Verifier.sol
 
 echo "----- Generate and print parameters of call -----"
 # Δημιουργία και εμφάνιση των παραμέτρων της κλήσης
 cd ./${FOLDER_PATH} && snarkjs generatecall | tee parameters.txt && cd ..
+
+# Αντιγραφή του ..._final.zkey αρχείου στο φάκελο server/zkp/
+cp ${FOLDER_PATH}/${CIRCUIT}_final.zkey server/zkp/

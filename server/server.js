@@ -19,8 +19,8 @@ const voteFilesDir = path.join(__dirname, "files");
 const filePath = path.join(voteFilesDir, "vote-secrets.txt");
 
 // Καθορίζει τις διαδρομές για τα αρχεία zkey και wasm που χρειάζονται για τα zk-SNARKs
-const zkeyFilename = "public/zkp/VoteCircuit_final.zkey";
-const wasmFilename = "public/zkp/VoteCircuit.wasm";
+const zkeyFilename = "server/zkp/VoteCircuit_final.zkey";
+const wasmFilename = "server/zkp/VoteCircuit.wasm";
 
 // Ρύθμιση της εφαρμογής express
 const app = express();
@@ -29,8 +29,8 @@ app.use(cors());            // Ενεργοποιεί την πολιτική Cr
 
 // Δημιουργία ενός provider για την σύνδεση με το δίκτυο Ethereum μέσω Hardhat
 const provider = new ethers.JsonRpcProvider("http://127.0.0.1:8545", {
-    chainId: 31337,  // Αναγνωριστικό για το τοπικό δίκτυο Hardhat
-    name: "hardhat"  // Όνομα δικτύου
+    chainId: 31337,         // Αναγνωριστικό για το τοπικό δίκτυο Hardhat
+    name: "hardhat"         // Όνομα δικτύου
 });
 
 // Δημιουργία types για την επαλήθευση της υπογραφής
@@ -156,10 +156,10 @@ async function groth16FullProve (req, res) {
 async function relayVote(req, res, ballotContract) {
     try {
         // Ανάκτηση των δεδομένων από το σώμα του αιτήματος
-        const { proofA, proofB, proofC, publicSignals, signature, newWalletPrivateKey } = req.body;
+        const { proofA, proofB, proofC, publicSignals, signature, newWalletPrivateKey, voteSecretBigInt } = req.body;
 
         // Ελέγχουμε αν όλες οι απαραίτητες παράμετροι υπάρχουν
-        if (!proofA || !proofB || !proofC || !publicSignals || !signature || !newWalletPrivateKey || !ballotContract) 
+        if (!proofA || !proofB || !proofC || !publicSignals || !signature || !newWalletPrivateKey || !voteSecretBigInt || !ballotContract) 
             throw new Error("Missing parameters");
 
         console.log("📩 Received vote request from frontend");
@@ -198,17 +198,14 @@ async function relayVote(req, res, ballotContract) {
         console.log("✅ Vote transaction confirmed hash: ", receipt.hash);
         console.log("✅ Vote transaction: ", tx);
 
-        // let voteCommitment = await ballotContract.connect(newWallet).proveYourVote(proofA, proofB, proofC, publicSignals, {gasLimit: gasCost, gasPrice: 1000000000n});
-        // console.log("voteCommitment", voteCommitment);
-        // while (!voteCommitment) {
-        //     console.log("Waiting to prove vote...");
-        //     await new Promise(resolve => setTimeout(resolve, 2000)); // Καθυστέρηση 2 δευτερολέπτων
-        //     voteCommitment = await ballotContract.connect(newWallet).proveYourVote(proofA, proofB, proofC, publicSignals, {gasLimit: gasCost, gasPrice: 1000000000n});
-        // }
+        // Αποθηκεύεται το vote secret του χρήστη, αφού έχει επαληθευτεί η ψήφος στο ballot
+        if (!fs.existsSync(voteFilesDir)) {                          // Έλεγχος αν υπάρχει ο φάκελος για την αποθήκευση των vote secrets, αν όχι, δημιουργείται
+            fs.mkdirSync(voteFilesDir, { recursive: true });
+        }
 
-        console.log("User vote has successfully been proved!");
+        await fs.promises.appendFile(filePath, `${voteSecretBigInt}\n`);    // Προσθήκη του vote secret σε νέα γραμμή στο αρχείο με τα υπόλοιπα
 
-        // Επιστροφή επιτυχίας στον χρήστη στο frontend
+        // Επιστροφή μην'υματος επιτυχίας στον client στο frontend
         res.json({ message: "You have successfully voted!", tx: tx });
 
     } catch (error) {
@@ -224,32 +221,6 @@ async function relayVote(req, res, ballotContract) {
             console.error(errorMsg);
         }
         
-        res.status(500).json({ error: errorMsg });
-    }
-}
-
-// Συνάρτηση για την αποθήκευση των vote secrets σε ένα αρχείο
-async function saveVoteSecret(req, res) {
-    try {
-        // Εξαγωγή του voteSecretBigInt από το σώμα του αιτήματος
-        const { voteSecretBigInt } = req.body;
-
-        if (!voteSecretBigInt) throw new Error("No vote secret provided");      // Έλεγχος για την ύπαρξη του voteSecretBigInt στο αίτημα
-
-        if (!fs.existsSync(voteFilesDir)) {                             // Έλεγχος αν υπάρχει ο φάκελος για την αποθήκευση των vote secrets, αν όχι, δημιουργείται
-            fs.mkdirSync(voteFilesDir, { recursive: true });
-        }
-
-        // Προσθήκη του vote secret σε νέα γραμμή στο αρχείο με τα υπόλοιπα
-        await fs.promises.appendFile(filePath, `${voteSecretBigInt}\n`);
-        
-        // Επιστροφή μηνύματος επιτυχίας στον client
-        res.json({ message: "Vote secret saved successfully!" });
-
-    } catch (error) {
-        // Καταγραφή του σφάλματος και επιστροφή του στον client
-        const errorMsg = "❌ Error writing to file: " + (error?.message || error);
-        console.error(errorMsg);
         res.status(500).json({ error: errorMsg });
     }
 }
@@ -320,7 +291,7 @@ async function getFinalResults(req, res, ballotContract) {
 async function setupRoutes(ballotContract) {
     app.post("/generate-address", (req, res) => generateSaltedAddress(req, res));
     app.post("/generate-proof", (req, res) => groth16FullProve(req, res));
-    app.post("/relay", (req, res) => relayVote(req, res, ballotContract));
+    app.post("/relay-vote", (req, res) => relayVote(req, res, ballotContract));
     app.post("/save-vote-secret", (req, res) => saveVoteSecret(req, res));
     app.post("/get-final-results", (req, res) => getFinalResults(req, res, ballotContract));
 }

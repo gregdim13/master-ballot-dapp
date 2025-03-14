@@ -26,3 +26,6 @@ node ${FOLDER_PATH}/${CIRCUIT}_js/generate_witness.js \
      ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm \
      ./circuit/input.json \
      ${FOLDER_PATH}/${CIRCUIT}_js/witness.wtns
+
+# Αντιγραφή του .wasm αρχείου στο φάκελο server/zkp/
+cp ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm server/zkp/
