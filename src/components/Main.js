@@ -259,19 +259,19 @@ class Main extends Component {
                                 </button> 
                                 <div className='mt-4'>
                                     {/* Εμφανίζει τον νικητή ή μήνυμα αν δεν έχουν εκδοθεί ακόμα τα αποτελέσματα */}
-                                    <label className='float-left' style={{marginLeft: '10px', fontWeight: "bold", fontSize: "18px"}}>
-                                        {this.props.pressResults ?
+                                    <label className='float-left' id='8' style={{marginLeft: '10px', fontWeight: "bold", fontSize: "18px"}}>
+                                        {this.props.labelId === 8 ?
                                             (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
-                                                'The winner is ' + this.props.finalCandidates[0].name + ' with ' + this.props.finalCandidates[0].voteCount + ' votes.' 
+                                                this.props.txMsg 
                                                 : 
-                                                <span style={{fontWeight: 'normal', color: 'red'}}>Elections results have not issued yet.</span>
+                                                <span style={{fontWeight: 'normal', color: 'red'}}>{this.props.txMsg}</span>
                                             )
                                             :
-                                            <></>
+                                            ''
                                         }
                                     </label> 
                                     {/* Εμφανίζει τα τελικά αποτελέσματα σε πίνακα αν υπάρχουν */}
-                                    {this.props.pressResults ?
+                                    {this.props.labelId === 8 ?
                                         (this.props.issuedResults && this.props.finalCandidates.length>0 ? 
                                             <div className='mt-1'>
                                                 <br/>

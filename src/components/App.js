@@ -18,8 +18,10 @@ import { RotatingLines } from "react-loader-spinner"; // Σπίνερ φόρτω
    Χρησιμοποιείται για τη δημιουργία συμβολικού συνδέσμου μεταξύ node_modules και artifacts.
 */
 
-/* Παράδειγμα εντολής εκτέλεσης:
-   set ELECTION_DURATION=3600 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
+/* Εντολές εκτέλεσης σε ξεχωριστά cmd ή terminal η κάθε μία:
+    npx hardhat node
+    set ELECTION_DURATION=3600 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
+    npm start
 */
 
 /* global BigInt */ // Δήλωση της BigInt για χρήση χωρίς προβλήματα
@@ -143,7 +145,6 @@ class App extends Component {
                     txMsg: '',
                     errorTrig: false,
                     labelId: 0,
-                    pressResults: false,
                     issuedResults: issRes
                 }, async () => {
                     console.log("Τα states ενημερώθηκαν! Τώρα εκτελούμε fetchCandidates...");
@@ -869,14 +870,22 @@ class App extends Component {
                 }
             }
 
-            this.setState({ finalCandidates: Candidates });
+            // Ενημέρωση του state με τα στοιχεία
+            this.setState({ 
+                finalCandidates: Candidates,
+                labelId: 8, 
+                txMsg: 'The winner is ' + Candidates[0].name + ' with ' + Candidates[0].voteCount + ' votes.'
+            });
+        }
+        else {
+            this.setState({ 
+                labelId: 8, 
+                txMsg: "Elections results have not issued yet." 
+            });
         }
 
-        // Ενημέρωση του state με τα στοιχεία
-        this.setState({ 
-            pressResults: true,
-            curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString()
-        });
+        // Ενημέρωση του state με την τρέχουμα ώρα
+        this.setState({ curTimestamp: BigInt(Math.floor(Date.now() / 1000)).toString() });
     };
 
     /**
@@ -905,7 +914,6 @@ class App extends Component {
             candidates: [],         // Λίστα των υποψηφίων
             finalCandidates: [],    // Ταξινομημένη λίστα των τελικών υποψηφίων με βάση τις ψήφους
             issuedResults: false,   // Αν έχουν εκδοθεί τα αποτελέσματα
-            pressResults: false,    // Αν ο χρήστης έχει ζητήσει να δει τα αποτελέσματα
             txMsg: '',              // Μήνυμα συναλλαγής
             errorTrig: false,       // Αν έχει προκύψει σφάλμα
             labelId: 0,             // Αναγνωριστικό για UI ειδοποιήσεις
@@ -945,7 +953,6 @@ class App extends Component {
                 registerVoters = {this.registerVoters}              // Συνάρτηση εγγραφής ψηφοφόρων
                 voteCandidate = {this.voteCandidate}                // Συνάρτηση ψήφου
                 issuedResults = {this.state.issuedResults}          // Κατάσταση έκδοσης αποτελεσμάτων
-                pressResults = {this.state.pressResults}            // Αν ο χρήστης έχει ζητήσει να δει τα αποτελέσματα
                 showElectionsResults = {this.showElectionsResults}  // Συνάρτηση εμφάνισης αποτελεσμάτων
                 countVotes = {this.countVotes}                      // Συνάρτηση καταμέτρησης ψήφων
                 candidates = {this.state.candidates}                // Λίστα υποψηφίων
