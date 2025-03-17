@@ -1,16 +1,28 @@
 import React, { Component } from 'react';
 import './Main.css';
 import chairperson from "../assets/chairperson.svg";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 class Main extends Component {
 
     constructor(props) {
         super(props);
-        // Αρχικοποίηση του επιλεγμένου index υποψηφίου στο state
+        // Αρχικοποίηση των states
         this.state = {
-            candidateIndex: 0,
+            candidateIndex: 0,                  // index υποψηφίου 
+            inputType: 'password',              // ορίζει το type του input tag στo πεδίο εισαγωγής κωδικού
+            showPasswordIcon: <FaEyeSlash />    // το εικονίδιο ματάκι στο input του password
         };
     }
+
+    // Η togglePasswordVisibility αλλάζει τον τύπο του input μεταξύ κειμένου και password, επιτρέποντας έτσι την εμφάνιση ή απόκρυψη του κωδικού
+    togglePasswordVisibility = () => {
+        this.setState(prevState => ({
+            inputType: prevState.inputType === 'password' ? 'text' : 'password',                    // Ελέγχει τον τρέχοντα τύπο του input. Αν είναι 'password', τον αλλάζει σε 'text', δηλαδή κάνει τον κωδικό ορατό.
+            showPasswordIcon: prevState.inputType === 'password' ? <FaEye /> : <FaEyeSlash />       // Εναλλάσσει το εικονίδιο ανάλογα με τον τύπο του input.
+        }));
+    };
+
 
     // Αλλάζει το index του επιλεγμένου υποψηφίου στο state όταν ο χρήστης επιλέξει διαφορετικό υποψήφιο από το dropdown menu
     handleSelectChange = (event) => {
@@ -177,26 +189,29 @@ class Main extends Component {
                                             ℹ
                                         </span>
                                     </label>
-                                    <div className='mb-3'>
-                                        <input 
-                                            ref={(input) => {this.passInput = input}}
-                                            type='text'
-                                            placeholder="Enter a Password"
-                                            required
-                                            style={{width: '35%'}}
-                                        />
-                                        {/* Εμφάνιση μηνυμάτων λάθους ή επιτυχίας κατά την ψηφοφορία */}
-                                        <label id='4' className='float-left' 
-                                            style={{ 
-                                                marginLeft: '15px', 
-                                                color: this.props.errorTrig ? 'red' : 'green'
-                                            }} 
-                                        >
-                                            {this.props.labelId === 4 ? this.props.txMsg : ''}
-                                        </label>
-                                    </div>
-
-                                    <button type='submit' id="btn-vote" className='btn btn-primary btn-lg btn-block'>VOTE</button>
+                                    <div className='mb-3' style={{ position: 'relative', width: '35%' }}>
+                                    <input 
+                                        ref={(input) => { this.passInput = input }}
+                                        type={this.state.inputType}
+                                        placeholder="Enter a Password"
+                                        required
+                                        style={{ width: '100%', paddingRight: '30px' }} // Εξασφαλίζει ότι το κείμενο δεν θα καλύπτεται από το εικονίδιο
+                                    />
+                                    <i
+                                        onClick={this.togglePasswordVisibility}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '50%', // Κεντράρισμα κατακόρυφα
+                                            right: '10px', // Θέση στα δεξιά
+                                            transform: 'translateY(-50%)', // Κεντράρισμα κατακόρυφα
+                                            cursor: 'pointer',
+                                            zIndex: 10 // Εξασφαλίζει ότι το εικονίδιο θα είναι πάνω από άλλα στοιχεία
+                                        }}
+                                    >
+                                        {this.state.showPasswordIcon}
+                                    </i>
+                                </div>
+                                                        <button type='submit' id="btn-vote" className='btn btn-primary btn-lg btn-block'>VOTE</button>
                                     {/* Εμφάνιση μηνυμάτων λάθους ή επιτυχίας μετά την ψηφοφορία */}
                                     <label id='3' className='float-left' 
                                         style={{ 
