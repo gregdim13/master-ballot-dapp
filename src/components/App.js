@@ -21,7 +21,7 @@ import { RotatingLines } from "react-loader-spinner"; // Σπίνερ φόρτω
 /* Εντολές εκτέλεσης σε ξεχωριστά cmd ή terminal η κάθε μία:
     npx hardhat node
     set ELECTION_DURATION=3600 && npx hardhat run scripts/deploy.js --network localhost && node server/server.js
-    npm start
+    npm run start
 */
 
 /* global BigInt */ // Δήλωση της BigInt για χρήση χωρίς προβλήματα
