@@ -272,6 +272,8 @@ class App extends Component {
                 console.error(errorMessage);
             }
 
+            window.alert(errorMessage);
+
             // Αποθήκευση μηνύματος σφάλματος στο state
             this.setState({ txMsg: errorMessage, errorTrig: true });
         }
@@ -734,9 +736,9 @@ class App extends Component {
         try {
             
             let curTimestamp = BigInt(Math.floor(Date.now() / 1000));       // Αποθήκευση της τρέχουσας ώρας
-            
+            console.log("test")
             // Έλεγχος αν η ψηφοφορία έχει λήξει πριν εκδοθούν τα αποτελέσματα
-            if (curTimestamp <= this.state.endTime || this.state.endTime === '0') 
+            if (curTimestamp <= this.state.endTime || !this.state.startVoting) 
                 throw new Error("Results cannot be issued before the ballot is finished.");
 
             let delay = (Number(this.state.endTime) + 12) - Number(curTimestamp);       // Υπολογισμός χρόνου καθυστέρησης
