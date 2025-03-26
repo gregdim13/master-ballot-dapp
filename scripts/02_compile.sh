@@ -22,12 +22,12 @@ if [ ! -d "$FOLDER_PATH" ]; then
 fi
 
 # Μεταγλώττιση του κυκλώματος χρησιμοποιώντας το circom και δημιουργία των απαραίτητων αρχείων
-circom ./circuit/${CIRCUIT}.circom --r1cs --wasm --sym --c -o ${FOLDER_PATH}
+circom ./circuits/${CIRCUIT}.circom --r1cs --wasm --sym --c -o ${FOLDER_PATH}
 
 # Δημιουργία του witness.wtns χρησιμοποιώντας το παραγόμενο WebAssembly αρχείο και τα input δεδομένα
 node ${FOLDER_PATH}/${CIRCUIT}_js/generate_witness.js \
      ${FOLDER_PATH}/${CIRCUIT}_js/${CIRCUIT}.wasm \
-     ./circuit/input.json \
+     ./circuits/input.json \
      ${FOLDER_PATH}/${CIRCUIT}_js/witness.wtns
 
 # Αντιγραφή του .wasm αρχείου στο φάκελο server/zkp/
