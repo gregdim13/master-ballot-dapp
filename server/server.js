@@ -292,7 +292,6 @@ async function setupRoutes(ballotContract) {
     app.post("/generate-address", (req, res) => generateSaltedAddress(req, res));
     app.post("/generate-proof", (req, res) => groth16FullProve(req, res));
     app.post("/relay-vote", (req, res) => relayVote(req, res, ballotContract));
-    app.post("/save-vote-secret", (req, res) => saveVoteSecret(req, res));
     app.post("/get-final-results", (req, res) => getFinalResults(req, res, ballotContract));
 }
 
