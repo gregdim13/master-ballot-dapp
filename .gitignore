@@ -8,10 +8,14 @@
 /ptau
 /cache
 /keys
-/artifacts
-/artifacts/contracts
 /src/artifacts
+/src/artifacts/build-info
+/src/artifacts/contracts
+/src/artifacts/contracts/Ballot.sol
+/src/artifacts/contracts/FakeTornado.sol
+/src/artifacts/contracts/Groth16Verifier.sol
 /server_files
+vote-secrets.txt
 
 # misc
 .env
