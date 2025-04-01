@@ -14,8 +14,8 @@
 /src/artifacts/contracts/Ballot.sol
 /src/artifacts/contracts/FakeTornado.sol
 /src/artifacts/contracts/Groth16Verifier.sol
-/server_files
-vote-secrets.txt
+/server/files/vote-secrets.txt
+/server/zkp
 
 # misc
 .env
